@@ -7,6 +7,11 @@ from html_classes import Form, Input, WebPage
 
 
 def setup_driver():
+    """
+    Create a driver and Returns it.
+    When someone runs this python file this function helps them to have a new driver.
+    """
+
     # with these settings, loading of a webpage would be faster.
     # because selenium won't wait for images to load and we don't need images.
     caps = DesiredCapabilities().CHROME
@@ -18,9 +23,13 @@ def setup_driver():
     return driver
 
 
-def get_all_urls_of_file():
+def get_all_urls_of_file(filename='all_explored_urls.txt'):
+    """
+    Gets all the urls from the previous phases and creates a list of them.
+    Return this list of all the urls that have been found on last phases.
+    """
     all_found_urls = []
-    with open('all_explored_urls.txt', 'r') as file:
+    with open(filename, 'r') as file:
         all_found_urls = file.readlines()
 
         all_found_urls = list(
@@ -30,6 +39,11 @@ def get_all_urls_of_file():
 
 
 def get_forms_of_all_pages_to_objs(all_urls, driver):
+    """
+    Explores all pages from the all_urls list.
+    Creates a WebPage object of each page and saves all the forms in it.
+    Returns the list of WebPage objects.
+    """
     all_web_pages_objs = []
     for url in all_urls:
         all_web_pages_objs.append(WebPage(url, driver=driver))
