@@ -4,16 +4,24 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from collect_page_urls import find_all_urls_of_single_webpage
 
-# with these settings, loading of a webpage would be faster.
-# because selenium won't wait for images to load and we don't need images.
-caps = DesiredCapabilities().CHROME
-caps["pageLoadStrategy"] = "eager"
+def setup_driver():
+    """
+    Create a driver and Returns it.
+    When someone runs this python file this function helps them to have a new driver.
+    """
 
-# creating driver.
-driver = webdriver.Chrome(desired_capabilities=caps)
+    # with these settings, loading of a webpage would be faster.
+    # because selenium won't wait for images to load and we don't need images.
+    caps = DesiredCapabilities().CHROME
+    caps["pageLoadStrategy"] = "eager"
+
+    # creating driver.
+    driver = webdriver.Chrome(desired_capabilities=caps)
+
+    return driver
 
 
-def find_all_urls_of_website(all_urls, all_explored_urls=None):
+def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
     """
     Finds all the urls of a website by searching all the urls of each page recursively.
 
@@ -24,7 +32,7 @@ def find_all_urls_of_website(all_urls, all_explored_urls=None):
 
     :return: List of all of the website urls.
     """
-    all_urls = all_urls.copy()
+    all_urls = root_urls.copy()
     
     assert len(all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
 
@@ -75,15 +83,11 @@ def find_all_urls_of_website(all_urls, all_explored_urls=None):
     return all_explored_urls
 
 
-# list of all the urls that have been explored so they won't be explored again.
-all_explored_urls = []
-
-# list of currently found urls
-# * put the root url here.
-all_urls = ['http://www.google.com/']
 
 
 if __name__ == '__main__':
+    all_urls = ['http://www.google.com/']
+
     import sys
 
     if len(sys.argv) > 1:
@@ -92,6 +96,13 @@ if __name__ == '__main__':
         print('You should enter a url as the first input.')
         sys.exit(1)
 
-    all_exp_urls = find_all_urls_of_website(all_urls, all_explored_urls)
+    driver = setup_driver()
+
+    # list of all the urls that have been explored so they won't be explored again.
+    all_explored_urls = []
+
+    all_exp_urls = find_all_urls_of_website(all_urls, driver, all_explored_urls)
     print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
     print(all_exp_urls)
+
+    driver.quit()
