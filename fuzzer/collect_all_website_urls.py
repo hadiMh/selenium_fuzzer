@@ -24,9 +24,9 @@ def find_all_urls_of_website(all_urls, all_explored_urls=None):
 
     :return: List of all of the website urls.
     """
-
+    all_urls = all_urls.copy()
     assert len(
-        all_urls) > 0, "You should add at least one url to the all_urls list to have a start point."
+        all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
 
     # default value for args
     if all_explored_urls is None:
