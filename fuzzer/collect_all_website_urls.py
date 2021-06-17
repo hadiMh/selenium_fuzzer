@@ -25,43 +25,52 @@ def find_all_urls_of_website(all_urls, all_explored_urls=None):
     :return: List of all of the website urls.
     """
     all_urls = all_urls.copy()
-    assert len(
-        all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
+    
+    assert len(all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
 
     # default value for args
     if all_explored_urls is None:
         all_explored_urls = []
 
-    while len(all_urls) != 0:
-        print('-' * 20)
-        print(f'All urls list length: {len(all_urls)}')
+    with open('all_explored_urls.txt', 'w+') as writer:
+        writer.write(all_urls[0])
 
-        popped_url = all_urls[0]  # all_urls.pop(0)
-        print(f'Url: {popped_url}\n')
+        while len(all_urls) != 0:
+            print('-' * 20)
+            print(f'All urls list length: {len(all_urls)}')
 
-        if popped_url not in all_explored_urls:
-            # add this url to explored urls list so we know it is already explored.
-            all_explored_urls.append(popped_url)
-            print(f'Exploring url: {popped_url}')
+            popped_url = all_urls[0]  # all_urls.pop(0)
+            print(f'Url: {popped_url}\n')
 
-            popped_url = popped_url.replace('www.', '').replace(
-                'https://', '').replace('http://', '')
+            if popped_url not in all_explored_urls:
+                # add this url to explored urls list so we know it is already explored.
+                all_explored_urls.append(popped_url)
+                print(f'Exploring url: {popped_url}')
 
-            urls_of_this_page = find_all_urls_of_single_webpage(
-                popped_url, driver)
-            print(f'Found {len(urls_of_this_page)} urls on this page.')
+                popped_url = popped_url       \
+                    .replace('www.', '')      \
+                    .replace('https://', '')  \
+                    .replace('http://', '')
 
-            new_found_urls = list(set(urls_of_this_page).difference(
-                set(all_urls+all_explored_urls)))
-            print(f'{len(new_found_urls)} urls are new.')
+                urls_of_this_page = find_all_urls_of_single_webpage(
+                    popped_url, driver)
+                print(f'Found {len(urls_of_this_page)} urls on this page.')
 
-            all_urls.extend(new_found_urls)
-            print(
-                f'Added {len(new_found_urls)} new urls to all urls list. all urls list new length is: {len(all_urls)}')
-        else:
-            print('This url is already explored.')
+                new_found_urls = list(set(urls_of_this_page).difference(
+                    set(all_urls+all_explored_urls)))
+                print(f'{len(new_found_urls)} urls are new.')
 
-        all_urls.pop(0)
+                all_urls.extend(new_found_urls)
+                
+                for url in new_found_urls:
+                    writer.write('\n' + url)
+
+                print(
+                    f'Added {len(new_found_urls)} new urls to all urls list. all urls list new length is: {len(all_urls)}')
+            else:
+                print('This url is already explored.')
+
+            all_urls.pop(0)
 
     return all_explored_urls
 
