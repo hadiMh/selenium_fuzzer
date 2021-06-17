@@ -41,7 +41,7 @@ def remove_hashtag_from_urls(list_of_urls):
 
     return list(set(final_urls))
 
-def find_all_final_urls(website_url, driver):
+def find_all_urls_of_single_webpage(website_url, driver):
     """Find all unique links in a webpage.
     This function checks that urls with # at the last part of the url are not seperate urls from the ones without sharp character.
     These urls are the same as the ones without sharp character because they are for html move in frontend.
@@ -73,7 +73,7 @@ if __name__ == '__main__':
         url = sys.argv[1]
     else:
         url = 'python.org'
-    urls = find_all_final_urls(url, driver)
+    urls = find_all_urls_of_single_webpage(url, driver)
     print('\n\r'.join(urls))
 
 
