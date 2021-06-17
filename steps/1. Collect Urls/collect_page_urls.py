@@ -1,14 +1,16 @@
-# To add a new cell, type '# %%'
-# To add a new markdown cell, type '# %% [markdown]'
-
-# %%
 def get_all_a_tags_on_this_page(driver):
+    """Get all <a> tags from the driver.
+    Returns all of them."""
+
     elements = driver.find_elements_by_tag_name('a')
     return elements
 
 
-# %%
 def get_all_href_from_a_elements(a_elements):
+    """Gets a list of <a> tags and return all of the href urls of them.
+    The None hrefs are ommited before return.
+    Returns the list of all urls of <a> tag list."""
+
     href_addrs = list(map(lambda el: el.get_attribute('href'), a_elements))
 
     # and (('http' in url) or ('https' in url) or ('www' in url)
@@ -17,13 +19,17 @@ def get_all_href_from_a_elements(a_elements):
     return http_https_www_urls
 
 
-# %%
 def filter_only_urls_of_this_website(urls, main_url):
+    """Filters the input urls by checking if they contain the website url.
+    So only the website internal urls will be returned."""
     return list(filter(lambda url: (f'.{main_url}' in url) or (f'/{main_url}' in url), urls))
 
 
-# %%
 def remove_hashtag_from_urls(list_of_urls):
+    """Removes the # from the end of urls. These sharp chars are used \
+    to move to another element on webpage; so they are not important as seperate urls.
+    So this function finds them and ommits this part of the url.
+    At last it removes all the duplicates of the newly created urls list and return the list."""
     final_urls = []
     for i, url in enumerate(list_of_urls):
         sharp_i = url.rfind('#')
@@ -35,9 +41,11 @@ def remove_hashtag_from_urls(list_of_urls):
 
     return list(set(final_urls))
 
-# %%
 def find_all_final_urls(website_url, driver):
-    """Find all unique links in a webpage."""
+    """Find all unique links in a webpage.
+    This function checks that urls with # at the last part of the url are not seperate urls from the ones without sharp character.
+    These urls are the same as the ones without sharp character because they are for html move in frontend.
+    So this function also takes care of them."""
 
     driver.get(f'http://www.{website_url}')
     a_elements = get_all_a_tags_on_this_page(driver)
@@ -53,10 +61,8 @@ def find_all_final_urls(website_url, driver):
     print(f'Final result: total pure links = {len(without_hashtag_urls)}')
     return without_hashtag_urls
 
-# find_all_final_urls(main_url, driver)
 
 
-# %%
 if __name__ == '__main__':
     import sys
     from selenium import webdriver
@@ -71,7 +77,6 @@ if __name__ == '__main__':
     print('\n\r'.join(urls))
 
 
-# %%
 
 
 
