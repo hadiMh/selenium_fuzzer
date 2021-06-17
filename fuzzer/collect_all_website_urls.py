@@ -80,7 +80,7 @@ all_explored_urls = []
 
 # list of currently found urls
 # * put the root url here.
-all_urls = ['http://www.atriya.com/']
+all_urls = ['http://www.google.com/']
 
 
 if __name__ == '__main__':

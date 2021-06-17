@@ -38,7 +38,7 @@ def get_forms_of_all_pages_to_objs(all_urls, driver):
 
 
 if __name__ == '__main__':
-    all_urls = ['http://www.atriya.com/Account']
+    all_urls = ['http://www.google.com']
 
     driver = setup_driver()
     webpages = get_forms_of_all_pages_to_objs(all_urls, driver)
