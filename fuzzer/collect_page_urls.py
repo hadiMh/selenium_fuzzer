@@ -1,3 +1,5 @@
+import re
+
 def get_all_a_tags_on_this_page(driver):
     """
     Get all <a> tags from the driver.
@@ -58,13 +60,15 @@ def find_all_urls_of_single_webpage(website_url, driver, prefix='http://www.'):
     So this function also takes care of them.
     """
 
+    re_result = re.search("^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)", website_url)
+    root_url = re_result.group(0)
+
     print(f'{prefix}{website_url}'.split(' '))
     driver.get(f'{prefix}{website_url}')
     a_elements = get_all_a_tags_on_this_page(driver)
     print(f'There are {len(a_elements)} <a> tags on this page.')
     urls = get_all_href_from_a_elements(a_elements)
-    # print(urls)
-    main_urls = filter_only_urls_of_this_website(urls, website_url)
+    main_urls = filter_only_urls_of_this_website(urls, root_url)
     print(f'{len(main_urls)} urls are Inside urls.')
     all_unique_urls = list(set(main_urls))
     print(f'{len(main_urls) - len(all_unique_urls)} where duplicate')

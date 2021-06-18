@@ -3,22 +3,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from collect_page_urls import find_all_urls_of_single_webpage
-
-def setup_driver():
-    """
-    Create a driver and Returns it.
-    When someone runs this python file this function helps them to have a new driver.
-    """
-
-    # with these settings, loading of a webpage would be faster.
-    # because selenium won't wait for images to load and we don't need images.
-    caps = DesiredCapabilities().CHROME
-    caps["pageLoadStrategy"] = "eager"
-
-    # creating driver.
-    driver = webdriver.Chrome(desired_capabilities=caps)
-
-    return driver
+from helpers import setup_driver
 
 
 def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
@@ -33,14 +18,15 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
     :return: List of all of the website urls.
     """
     all_urls = root_urls.copy()
-    
-    assert len(all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
+
+    assert len(
+        all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
 
     # default value for args
     if all_explored_urls is None:
         all_explored_urls = []
 
-    with open('all_explored_urls.txt', 'w+') as writer:
+    with open('saved_data/all_explored_urls.txt', 'w+') as writer:
         writer.write(all_urls[0])
 
         while len(all_urls) != 0:
@@ -62,14 +48,16 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
 
                 urls_of_this_page = find_all_urls_of_single_webpage(
                     popped_url, driver)
-                print(f'Found {len(urls_of_this_page)} urls on this page.')
+                print(
+                    f'Found {len(urls_of_this_page)} urls on this page.')
 
                 new_found_urls = list(set(urls_of_this_page).difference(
                     set(all_urls+all_explored_urls)))
-                print(f'{len(new_found_urls)} urls are new.')
+                print(
+                    f'{len(new_found_urls)} urls are new.')
 
                 all_urls.extend(new_found_urls)
-                
+
                 for url in new_found_urls:
                     writer.write('\n' + url)
 
@@ -81,8 +69,6 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
             all_urls.pop(0)
 
     return all_explored_urls
-
-
 
 
 if __name__ == '__main__':
@@ -101,7 +87,8 @@ if __name__ == '__main__':
     # list of all the urls that have been explored so they won't be explored again.
     all_explored_urls = []
 
-    all_exp_urls = find_all_urls_of_website(all_urls, driver, all_explored_urls)
+    all_exp_urls = find_all_urls_of_website(
+        all_urls, driver, all_explored_urls)
     print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
     print(all_exp_urls)
 
