@@ -33,7 +33,7 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
             print('-' * 20)
             print(f'All urls list length: {len(all_urls)}')
 
-            popped_url = all_urls[0]  # all_urls.pop(0)
+            popped_url = all_urls[0]
             print(f'Url: {popped_url}\n')
 
             if popped_url not in all_explored_urls:
@@ -87,8 +87,7 @@ if __name__ == '__main__':
     # list of all the urls that have been explored so they won't be explored again.
     all_explored_urls = []
 
-    all_exp_urls = find_all_urls_of_website(
-        all_urls, driver, all_explored_urls)
+    all_exp_urls = find_all_urls_of_website(all_urls, driver, all_explored_urls)
     print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
     print(all_exp_urls)
 
