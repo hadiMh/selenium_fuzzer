@@ -42,8 +42,12 @@ class Form:
         self.method = selenium_form_obj.get_attribute('method')
         self.action = selenium_form_obj.get_attribute('action')
         self.selenium_form_obj = selenium_form_obj
-        self.submit_button = selenium_form_obj.find_element_by_css_selector(
-            'input[type=submit]')
+        
+        submit_buttons = selenium_form_obj.find_elements_by_css_selector('input[type=submit]')
+        if len(submit_buttons) > 0:
+            self.submit_button = Input(submit_buttons[0])
+        else:
+            self.submit_button = None 
 
         self._get_inputs_of_form()
 
@@ -56,12 +60,13 @@ class Form:
 
     def __str__(self):
         tab = '\t'
+        # return 'h'
         return (
             f'(Page Url = {self.page_url})\n\n'
             f'<form method="{self.method}" action="{self.action}">\n'
             f'\t{(os.linesep+tab).join([str(inp) for inp in self.inputs_list if inp.input_type != "submit"])}'
             '\n'
-            f'\n\t{str(Input(self.submit_button))}'
+            f'\n\t{str(self.submit_button)}'
             f'\n</form>'
         )
 
