@@ -1,10 +1,8 @@
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from html_classes import Form, Input, WebPage
-
 
 def setup_driver():
     """
@@ -23,13 +21,13 @@ def setup_driver():
     return driver
 
 
-def get_all_urls_of_file(filename='all_explored_urls.txt'):
+def get_all_urls_of_file():
     """
     Gets all the urls from the previous phases and creates a list of them.
     Return this list of all the urls that have been found on last phases.
     """
     all_found_urls = []
-    with open(filename, 'r') as file:
+    with open('all_explored_urls.txt', 'r') as file:
         all_found_urls = file.readlines()
 
         all_found_urls = list(
@@ -51,13 +49,23 @@ def get_forms_of_all_pages_to_objs(all_urls, driver):
     return all_web_pages_objs
 
 
+
 if __name__ == '__main__':
-    all_urls = ['http://www.google.com']
+    # all_urls = ['http://www.google.com']
+    all_urls = get_all_urls_of_file()
+
+    all_urls = all_urls[1:]
 
     driver = setup_driver()
     webpages = get_forms_of_all_pages_to_objs(all_urls, driver)
 
     for webpage in webpages:
         print(webpage)
+
+    print('-'*50)
+
+    for webpage in webpages:
+        if webpage.number_of_forms > 0:
+            print(webpage)
 
     driver.quit()
