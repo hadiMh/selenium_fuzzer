@@ -30,7 +30,7 @@ def generate_random_string(length=5):
     return ''.join(result)
 
 
-class Tag:
+class HtmlTag:
     def __init__(self, tag_name, tag_id, inner_text, selenium_input_obj):
         self.tag_name = tag_name
         self.tag_id = tag_id
@@ -42,7 +42,7 @@ class Tag:
 
 
 def generate_random_tag_with_id(selenium_input_obj):
-    return Tag(f'h1', generate_random_string(), 'Hello', selenium_input_obj)
+    return HtmlTag(f'h1', generate_random_string(), 'Hello', selenium_input_obj)
 
 
 def url_xss_attack_test(url, driver):
@@ -66,7 +66,7 @@ def url_xss_attack_test(url, driver):
         random_tags = []
 
         for input_el in inputs:
-            random_tag: Tag = generate_random_tag_with_id(input_el)
+            random_tag: HtmlTag = generate_random_tag_with_id(input_el)
             random_tags.append(random_tag)
 
             input_el.send_keys(random_tag.get_html_string())
