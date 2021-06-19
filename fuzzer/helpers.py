@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-def setup_driver():
+def setup_driver(wait_for_full_load=True):
     """
     Create a driver and Returns it.
     When someone runs this python file this function helps them to have a new driver.
@@ -12,7 +12,8 @@ def setup_driver():
     # because selenium won't wait for images to load and we don't need images.
     caps = DesiredCapabilities().CHROME
     # TODO: change this so it is enabled by choice.
-    # caps["pageLoadStrategy"] = "eager"
+    if not wait_for_full_load:
+        caps["pageLoadStrategy"] = "eager"
 
     # creating driver.
     driver = webdriver.Chrome(desired_capabilities=caps)

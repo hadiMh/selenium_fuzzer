@@ -9,17 +9,17 @@ from helpers import setup_driver, get_all_urls_of_file, get_all_form_urls_of_fil
 from collect_all_website_urls import find_all_urls_of_website
 from collect_forms import get_forms_of_all_pages_to_objs
 
-def phase_one(to_explore_urls, driver, explored_urls=None):
-    """
-    Returns list of all urls of a website.
+# def phase_one(to_explore_urls, driver, explored_urls=None):
+#     """
+#     Returns list of all urls of a website.
 
-    :param 
-    """
+#     :param 
+#     """
 
-    # try:
-    return find_all_urls_of_website(to_explore_urls, driver, explored_urls)
-    # except:
-    #     print(colored('Exception: Phase One Exception.', 'red'))
+#     # try:
+#     return find_all_urls_of_website(to_explore_urls, driver, explored_urls)
+#     # except:
+#     #     print(colored('Exception: Phase One Exception.', 'red'))
 
 
 if __name__ == "__main__":
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     if load_urls_from_file:
         explored_urls = get_all_urls_of_file()
     else:
-        explored_urls = phase_one(to_explore_urls, driver)
+        explored_urls = find_all_urls_of_website(to_explore_urls, driver, all_explored_urls=None)
 
     all_form_urls = []
     if load_form_urls_from_file:

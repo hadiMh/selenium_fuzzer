@@ -17,6 +17,7 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
 
     :return: List of all of the website urls.
     """
+    
     all_urls = root_urls.copy()
 
     assert len(all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
