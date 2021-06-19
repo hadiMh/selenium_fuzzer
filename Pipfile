@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 selenium = "*"
 jupyter = "*"
+termcolor = "*"
 
 [dev-packages]
 autopep8 = "*"

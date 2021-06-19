@@ -1,5 +1,6 @@
 import re
 
+
 def get_all_a_tags_on_this_page(driver):
     """
     Get all <a> tags from the driver.
@@ -30,7 +31,21 @@ def filter_only_urls_of_this_website(urls, main_url):
     Filters the input urls by checking if they contain the website url.
     So only the website internal urls will be returned.
     """
-    return list(filter(lambda url: (f'.{main_url}' in url) or (f'/{main_url}' in url), urls))
+    main_url = main_url.replace('www.', '').replace('https://', '').replace('http://', '')
+    result = []
+
+    for url in urls:
+        if url == '':
+            continue
+        
+        re_result = re.search("^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)", url)
+        main_part_of_url = re_result.group(0)
+
+        if main_url in main_part_of_url:
+            result.append(url)
+
+    return result
+    # return list(filter(lambda url: (f'.{main_url}' in url) or (f'/{main_url}' in url), urls))
 
 
 def remove_hashtag_from_urls(list_of_urls):

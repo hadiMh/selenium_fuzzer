@@ -12,12 +12,7 @@ class Input:
         self.input_name = selenium_input_obj.get_attribute('name')
         self.placeholder = selenium_input_obj.get_attribute('placeholder')
         # ? check if it works all the time
-        self.required = True if selenium_input_obj.get_attribute(
-            'required') else False
-        # if selenium_form_obj.get_attribute('required'):
-        #     self.required = True
-        # else:
-        #     self.required = False
+        self.required = True if selenium_input_obj.get_attribute('required') else False
 
     def __str__(self):
         input_repr = []
@@ -42,25 +37,25 @@ class Form:
         self.method = selenium_form_obj.get_attribute('method')
         self.action = selenium_form_obj.get_attribute('action')
         self.selenium_form_obj = selenium_form_obj
-        
+
         submit_buttons = selenium_form_obj.find_elements_by_css_selector('input[type=submit]')
+        # TODO: remember to implement <button> type of submit alongsile <input type="submit">
+        # submit_buttons = selenium_form_obj.find_elements_by_tag_name('button')
         if len(submit_buttons) > 0:
             self.submit_button = Input(submit_buttons[0])
         else:
-            self.submit_button = None 
+            self.submit_button = None
 
         self._get_inputs_of_form()
 
     def _get_inputs_of_form(self):
-        self.inputs_object_list = self.selenium_form_obj.find_elements_by_tag_name(
-            'input')
+        self.inputs_object_list = self.selenium_form_obj.find_elements_by_tag_name('input')
 
-        self.inputs_list = [Input(selenium_input_obj)
-                            for selenium_input_obj in self.inputs_object_list]
+        self.inputs_list = [Input(selenium_input_obj) for selenium_input_obj in self.inputs_object_list]
 
     def __str__(self):
         tab = '\t'
-        # return 'h'
+        
         return (
             f'(Page Url = {self.page_url})\n\n'
             f'<form method="{self.method}" action="{self.action}">\n'
@@ -79,6 +74,7 @@ def get_all_form_tags_on_url(url, driver):
     Get all <form> tags from the driver.
     Returns all of them.
     """
+    
     driver.get(url)
     elements = driver.find_elements_by_tag_name('form')
     return elements
