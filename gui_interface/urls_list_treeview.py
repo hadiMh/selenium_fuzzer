@@ -5,10 +5,10 @@ from tkinter import ttk
 class CustomTreeView:
     columns_data = [
         {'name': 'id', 'width': 50, 'anchor': 'center'},
-        {'name': 'domain', 'width': 150, 'anchor': 'w'},
-        {'name': 'full_url', 'width': 700, 'anchor': 'w'},
-        {'name': 'inner', 'width': 70, 'anchor': 'center'},
-        {'name': 'form', 'width': 70, 'anchor': 'center'},
+        # {'name': 'domain', 'width': 150, 'anchor': 'w'},
+        {'name': 'full_url', 'width': 1000, 'anchor': 'w'},
+        # {'name': 'inner', 'width': 70, 'anchor': 'center'},
+        # {'name': 'form', 'width': 70, 'anchor': 'center'},
     ]
 
     def __init__(self, master):
@@ -17,7 +17,6 @@ class CustomTreeView:
         self.master.grid_rowconfigure(0, weight=1)
 
         self.tree = ttk.Treeview(self.master)
-        self.tree_rows_count = 0
         self.tree.grid(column=0, row=0, sticky='nsew')
 
         self.format_tree_columns()
@@ -50,15 +49,18 @@ class CustomTreeView:
     def append_data(self, row_data):
         values = (
             row_data['id'],
-            row_data['domain'],
+            # row_data['domain'],
             row_data['url'],
-            row_data['inner'],
-            row_data['form'],
+            # row_data['inner'],
+            # row_data['form'],
         )
         self.tree.insert('', 'end', values=values)
-        self.tree_rows_count += 1
 
         self.tree.yview_moveto(1)
+
+    def clear_data(self):
+        self.tree.delete(*self.tree.get_children())
+
 
 if __name__ == '__main__':
     window = tk.Tk()

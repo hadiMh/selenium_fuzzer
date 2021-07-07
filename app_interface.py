@@ -178,36 +178,48 @@ class App:
         )
         self.btn_open_browser.grid(row=0, column=2, padx=10, pady=10, sticky=(W, ))
 
+        self.btn_clear_urls = ttk.Button(
+            self.frm_find_urls_panel,
+            text='Clear Urls',
+            command=self.clear_urls,
+            padding=(10, 5, 10, 5),
+        )
+        self.btn_clear_urls.grid(row=0, column=3, padx=10, pady=10, sticky=(W, ))
+
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
         self.frm_treeview.grid(row=2, column=0, padx=10, pady=10)
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
+        self.urls = []
 
-    def add_random_data_to_urls_tree(self):
-        import random
-        i = random.randint(1, 100)
-        row_data = {
-            'id': i,
-            'domain': f'domain{i}',
-            'url': f'url{i}' + '' if i != 1 else 'h'*300,
-            'inner': True if i % 3 == 0 else False,
-            'form': True if i % 3 == 2 else False,
-        }
-        self.tree_urls.append_data(row_data)
+    # def add_random_data_to_urls_tree(self):
+    #     import random
+    #     i = random.randint(1, 100)
+    #     row_data = {
+    #         'id': i,
+    #         'domain': f'domain{i}',
+    #         'url': f'url{i}' + '' if i != 1 else 'h'*300,
+    #         'inner': True if i % 3 == 0 else False,
+    #         'form': True if i % 3 == 2 else False,
+    #     }
+    #     self.tree_urls.append_data(row_data)
 
     def get_urls_based_of_approach(self):
         if self.chbox_load_from_file.state()[0] == 'alternate':
             self.start_find_all_urls()
         else:
+            self.clear_urls()
             for url in get_all_urls_of_file():
-                self.tree_urls.append_data({
-                    'id': self.tree_urls.tree_rows_count+1,
+                data = {
+                    'id': len(self.urls)+1,
                     'domain': f'domain',
                     'url': url,
                     'inner': True,
                     'form': None,
-                })
+                }
+                self.tree_urls.append_data(data)
+                self.urls.append(data)
 
     def start_find_all_urls(self):
         is_valid, url = self.panel_fuzzer_settings.get_url()
@@ -220,13 +232,15 @@ class App:
             self.driver = setup_driver(wait_for_full_load=False)
 
         def add_url_to_treeview(url):
-            self.tree_urls.append_data({
-                'id': self.tree_urls.tree_rows_count+1,
+            data = {
+                'id': len(self.urls)+1,
                 'domain': f'domain',
                 'url': url,
                 'inner': True,
                 'form': None,
-            })
+            }
+            self.tree_urls.append_data(data)
+            self.urls.append(data)
 
         def thread_func_find_all_website_urls():
             all_urls = [f'http://www.{url}']
@@ -248,6 +262,10 @@ class App:
         if not self.driver:
             self.driver = setup_driver(wait_for_full_load=False)
             self.driver.get(url)
+
+    def clear_urls(self):
+        self.tree_urls.clear_data()
+        self.urls.clear()
 
 
 def main():
