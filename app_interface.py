@@ -5,7 +5,8 @@ from tkinter import N, E, S, W
 import re
 import validators
 
-from fuzzer.collect_all_website_urls import setup_driver, find_all_urls_of_website
+from fuzzer.helpers import setup_driver
+from fuzzer.collect_all_website_urls import find_all_urls_of_website
 from gui_interface.urls_list_treeview import CustomTreeView
 
 
@@ -205,7 +206,7 @@ class App:
                 'domain': f'domain',
                 'url': url,
                 'inner': True,
-                'form': False,
+                'form': None,
             })
 
         def thread_func_find_all_website_urls():
