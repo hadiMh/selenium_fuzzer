@@ -5,7 +5,8 @@ from tkinter import N, E, S, W
 import re
 import validators
 
-from urls_list_treeview import CustomTreeView
+from fuzzer.collect_all_website_urls import setup_driver
+from gui_interface.urls_list_treeview import CustomTreeView
 
 
 class GetUrlSettingsPanel:
@@ -105,7 +106,6 @@ class GetUrlSettingsPanel:
 
     #     print('finding... now')
 
-
     # def create_find_all_urls_panel(self):
     #     self.btn_find_all_urls = ttk.Button(
     #         self.main_frame,
@@ -139,6 +139,7 @@ class GetUrlSettingsPanel:
 class App:
     def __init__(self, master):
         self.master = master
+        self.driver = None
 
         # * create fuzzer settings panel
         self.frm_fuzzer_settings = ttk.Frame(self.master)
@@ -149,13 +150,26 @@ class App:
         # self.frm_find_all_urls_panel.grid(row=1, column=0, padx=10, pady=10, sticky=(W, ))
         # self.panel_find_all_urls = FindAllUrlsPanel(self.frm_find_all_urls_panel)
 
-        self.btn_find_all_urls = ttk.Button(
+        self.frm_find_urls_panel = ttk.Frame(
             self.master,
+        )
+        self.frm_find_urls_panel.grid(row=1, column=0)
+
+        self.btn_find_all_urls = ttk.Button(
+            self.frm_find_urls_panel,
             text='Find Urls of This Website',
             command=self.start_find_all_urls,
             padding=(10, 5, 10, 5),
         )
-        self.btn_find_all_urls.grid(row=1, column=0, padx=10, pady=10, sticky=(W, ))
+        self.btn_find_all_urls.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
+
+        self.btn_open_browser = ttk.Button(
+            self.frm_find_urls_panel,
+            text='Open Browser',
+            command=self.open_browser,
+            padding=(10, 5, 10, 5),
+        )
+        self.btn_open_browser.grid(row=0, column=1, padx=10, pady=10, sticky=(W, ))
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
@@ -189,6 +203,18 @@ class App:
             'inner': True,
             'form': False,
         })
+
+    def open_browser(self):
+        is_valid, url = self.panel_fuzzer_settings.get_url()
+
+        if not is_valid:
+            self.panel_fuzzer_settings.show_message_check_url()
+            return
+
+        if not self.driver:
+            self.driver = setup_driver()
+            self.driver.get(url)
+
 
 def main():
     window = tk.Tk()

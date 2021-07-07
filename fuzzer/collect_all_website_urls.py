@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
-from collect_page_urls import find_all_urls_of_single_webpage
-from helpers import setup_driver
+from .collect_page_urls import find_all_urls_of_single_webpage
+from .helpers import setup_driver
 
 
 def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
