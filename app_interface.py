@@ -5,7 +5,7 @@ from tkinter import N, E, S, W
 import re
 import validators
 
-from fuzzer.helpers import setup_driver
+from fuzzer.helpers import setup_driver, get_all_urls_of_file
 from fuzzer.collect_all_website_urls import find_all_urls_of_website
 from gui_interface.urls_list_treeview import CustomTreeView
 
@@ -154,15 +154,21 @@ class App:
         self.frm_find_urls_panel = ttk.Frame(
             self.master,
         )
-        self.frm_find_urls_panel.grid(row=1, column=0)
+        self.frm_find_urls_panel.grid(row=1, column=0, sticky=(W, ))
+
+        self.chbox_load_from_file = ttk.Checkbutton(
+            self.frm_find_urls_panel,
+            text='Load from file',
+        )
+        self.chbox_load_from_file.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
 
         self.btn_find_all_urls = ttk.Button(
             self.frm_find_urls_panel,
             text='Find Urls of This Website',
-            command=self.start_find_all_urls,
+            command=self.get_urls_based_of_approach,
             padding=(10, 5, 10, 5),
         )
-        self.btn_find_all_urls.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
+        self.btn_find_all_urls.grid(row=0, column=1, padx=10, pady=10, sticky=(W, ))
 
         self.btn_open_browser = ttk.Button(
             self.frm_find_urls_panel,
@@ -170,7 +176,7 @@ class App:
             command=self.open_browser,
             padding=(10, 5, 10, 5),
         )
-        self.btn_open_browser.grid(row=0, column=1, padx=10, pady=10, sticky=(W, ))
+        self.btn_open_browser.grid(row=0, column=2, padx=10, pady=10, sticky=(W, ))
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
@@ -189,6 +195,19 @@ class App:
             'form': True if i % 3 == 2 else False,
         }
         self.tree_urls.append_data(row_data)
+
+    def get_urls_based_of_approach(self):
+        if self.chbox_load_from_file.state()[0] == 'alternate':
+            self.start_find_all_urls()
+        else:
+            for url in get_all_urls_of_file():
+                self.tree_urls.append_data({
+                    'id': self.tree_urls.tree_rows_count+1,
+                    'domain': f'domain',
+                    'url': url,
+                    'inner': True,
+                    'form': None,
+                })
 
     def start_find_all_urls(self):
         is_valid, url = self.panel_fuzzer_settings.get_url()
