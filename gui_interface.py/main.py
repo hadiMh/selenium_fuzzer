@@ -8,7 +8,7 @@ import validators
 from urls_list_treeview import CustomTreeView
 
 
-class FuzzerSettings:
+class GetUrlSettingsPanel:
     def __init__(self, master):
         self.master = master
 
@@ -21,6 +21,8 @@ class FuzzerSettings:
         # self.main_frame.columnconfigure(0, weight=1)
 
         self.create_get_url_panel()
+
+        # self.create_find_all_urls_panel()
 
     def configure_styles(self):
         style = ttk.Style()
@@ -70,20 +72,68 @@ class FuzzerSettings:
         )
         self.lbl_check_url_result.grid(row=0, column=3)
 
-    def show_message_check_url(self):
+    def is_entered_url_valid(self):
         url = self.ent_main_url.get()
-        url = url.replace('www.', '')      \
+        url = url.replace('www.', '') \
             .replace('https://', '')  \
             .replace('http://', '')
 
         valid = validators.url('http://' + url)
 
-        if valid==True:
+        return valid, 'http://' + url
+
+    def show_message_check_url(self):
+        valid, _ = self.is_entered_url_valid()
+
+        if valid == True:
             self.lbl_check_url_result['text'] = 'Correct url.'
             self.lbl_check_url_result.configure(style="Green.Label")
         else:
             self.lbl_check_url_result['text'] = 'Wrong url.'
             self.lbl_check_url_result.configure(style="Red.Label")
+
+    def get_url(self):
+        valid, url = self.is_entered_url_valid()
+
+        if valid == True:
+            return True, url
+        else:
+            return False, ''
+
+    # def find_all_urls_of_website(self):
+    #     is_valid, url = self.get_url()
+
+    #     print('finding... now')
+
+
+    # def create_find_all_urls_panel(self):
+    #     self.btn_find_all_urls = ttk.Button(
+    #         self.main_frame,
+    #         text='Find Urls of This Website',
+    #         command=self.find_all_urls_of_website,
+    #         padding=(10, 5, 10, 5),
+    #     )
+    #     self.btn_find_all_urls.grid(row=1, column=0)
+
+
+# class FindAllUrlsPanel:
+#     def __init__(self, master, get_url_callback):
+#         self.master = master
+#         self.get_url_callback = get_url_callback
+
+#         self.main_frame = ttk.Frame(self.master, )
+#         self.main_frame.pack(side=tk.LEFT, fill=tk.BOTH)
+
+#         self.btn_find_all_urls = ttk.Button(
+#             self.main_frame,
+#             text='Find Urls of This Website',
+#             command=self.find_all_urls_of_website,
+#             padding=(10, 5, 10, 5),
+#         )
+#         self.btn_find_all_urls.grid(row=0, column=0)
+
+#     def find_all_urls_of_website(self):
+#         is_valid, url = self.get_url_callback()
 
 
 class App:
@@ -93,12 +143,23 @@ class App:
         # * create fuzzer settings panel
         self.frm_fuzzer_settings = ttk.Frame(self.master)
         self.frm_fuzzer_settings.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
+        self.panel_fuzzer_settings = GetUrlSettingsPanel(self.frm_fuzzer_settings)
 
-        self.panel_fuzzer_settings = FuzzerSettings(self.frm_fuzzer_settings)
+        # self.frm_find_all_urls_panel = ttk.Frame(self.master)
+        # self.frm_find_all_urls_panel.grid(row=1, column=0, padx=10, pady=10, sticky=(W, ))
+        # self.panel_find_all_urls = FindAllUrlsPanel(self.frm_find_all_urls_panel)
+
+        self.btn_find_all_urls = ttk.Button(
+            self.master,
+            text='Find Urls of This Website',
+            command=self.start_find_all_urls,
+            padding=(10, 5, 10, 5),
+        )
+        self.btn_find_all_urls.grid(row=1, column=0, padx=10, pady=10, sticky=(W, ))
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
-        self.frm_treeview.grid(row=1, column=0, padx=10, pady=10)
+        self.frm_treeview.grid(row=2, column=0, padx=10, pady=10)
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
 
@@ -114,6 +175,20 @@ class App:
         }
         self.tree_urls.append_data(row_data)
 
+    def start_find_all_urls(self):
+        is_valid, url = self.panel_fuzzer_settings.get_url()
+
+        if not is_valid:
+            self.panel_fuzzer_settings.show_message_check_url()
+            return
+
+        self.tree_urls.append_data({
+            'id': 1,
+            'domain': f'domain {url}',
+            'url': url,
+            'inner': True,
+            'form': False,
+        })
 
 def main():
     window = tk.Tk()
