@@ -6,10 +6,11 @@ class CustomTreeView:
     columns_data = [
         {'name': 'id', 'width': 50, 'anchor': 'center'},
         # {'name': 'domain', 'width': 150, 'anchor': 'w'},
-        {'name': 'full_url', 'width': 800, 'anchor': 'w'},
+        {'name': 'full_url', 'width': 900, 'anchor': 'w'},
         # {'name': 'inner', 'width': 70, 'anchor': 'center'},
         # {'name': 'form', 'width': 70, 'anchor': 'center'},
         {'name': 'num', 'width': 70, 'anchor': 'center'},
+        {'name': 'xss', 'width': 70, 'anchor': 'center'},
     ]
 
     def __init__(self, master):

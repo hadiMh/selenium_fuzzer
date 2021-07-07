@@ -9,7 +9,7 @@ import validators
 
 from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
 
-from fuzzer.helpers import setup_driver, get_all_urls_of_file
+from fuzzer.helpers import setup_driver, get_all_urls_of_file, get_all_form_urls_of_file
 from fuzzer.collect_all_website_urls import find_all_urls_of_website
 from gui_interface.urls_list_treeview import CustomTreeView
 
@@ -124,7 +124,7 @@ class App:
         self.frm_find_urls_panel = ttk.Frame(
             self.master,
         )
-        self.frm_find_urls_panel.grid(row=1, column=0, sticky=(W, ))
+        self.frm_find_urls_panel.grid(row=1, column=0, padx=10, sticky=(W, ))
 
         self.chbox_load_from_file = ttk.Checkbutton(
             self.frm_find_urls_panel,
@@ -159,14 +159,20 @@ class App:
         self.frm_get_from_urls = ttk.Frame(
             self.master,
         )
-        self.frm_get_from_urls.grid(row=2, column=0, padx=10, pady=10, sticky=(W, ))
+        self.frm_get_from_urls.grid(row=2, column=0, padx=10, sticky=(W, ))
+
+        self.chbox_load_forms_from_file = ttk.Checkbutton(
+            self.frm_get_from_urls,
+            text='Load form urls from file',
+        )
+        self.chbox_load_forms_from_file.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
 
         self.btn_get_forms_of_urls = ttk.Button(
             self.frm_get_from_urls,
             text='Get Forms',
-            command=self.start_find_form_urls,
+            command=self.get_form_urls_based_of_approach,
         )
-        self.btn_get_forms_of_urls.grid(row=0, column=0)
+        self.btn_get_forms_of_urls.grid(row=0, column=1)
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
@@ -176,17 +182,17 @@ class App:
         self.urls = []
 
     def get_urls_based_of_approach(self):
-        if self.chbox_load_from_file.state()[0] == 'alternate':
+        if self.chbox_load_from_file.instate(['!selected']):
             self.start_find_all_urls()
         else:
             self.clear_urls()
             for url in get_all_urls_of_file():
                 data = {
                     'id': len(self.urls)+1,
-                    'domain': f'domain',
+                    # 'domain': f'domain',
                     'url': url,
-                    'inner': True,
-                    'form': None,
+                    # 'inner': True,
+                    # 'form': None,
                 }
                 self.tree_urls.append_data(data)
                 self.urls.append(data)
@@ -216,7 +222,6 @@ class App:
             all_urls = [f'http://www.{url}']
             all_explored_urls = []
             find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview])
-
 
         x = threading.Thread(target=thread_func_find_all_website_urls)
         x.start()
@@ -259,6 +264,22 @@ class App:
 
         x = threading.Thread(target=thread_find_all_form_urls)
         x.start()
+
+    def get_form_urls_based_of_approach(self):
+        if self.chbox_load_forms_from_file.instate(['!selected']):
+            self.start_find_form_urls()
+        else:
+            self.clear_urls()
+            for url in get_all_form_urls_of_file():
+                data = {
+                    'id': len(self.urls)+1,
+                    # 'domain': f'domain',
+                    'url': url,
+                    # 'inner': True,
+                    # 'form': None,
+                }
+                self.tree_urls.append_data(data)
+                self.urls.append(data)
 
 
 def main():
