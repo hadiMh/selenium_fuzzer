@@ -247,16 +247,18 @@ class App:
 
         def middleware_get_webpage_obj(webpage):
             if webpage.number_of_forms > 0:
-                data = {
-                    'id': len(self.urls)+1,
-                    # 'domain': f'domain',
-                    'url': webpage.page_url,
-                    # 'inner': True,
-                    # 'form': None,
-                    'num': webpage.number_of_forms,
-                }
-                self.tree_urls.append_data(data)
-                self.urls.append(data)
+                for i, form in enumerate(webpage.forms):
+                    data = {
+                        'id': len(self.urls)+1,
+                        # 'domain': f'domain',
+                        'url': webpage.page_url,
+                        # 'inner': True,
+                        # 'form': None,
+                        'num': f'{i+1}/{webpage.number_of_forms}',
+                        'method': form.method.upper(),
+                    }
+                    self.tree_urls.append_data(data)
+                    self.urls.append(data)
 
         def thread_find_all_form_urls():
             all_urls = list(map(lambda item: item['url'], all_urls_dict_list))

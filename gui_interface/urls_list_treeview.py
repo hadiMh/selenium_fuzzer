@@ -10,6 +10,7 @@ class CustomTreeView:
         # {'name': 'inner', 'width': 70, 'anchor': 'center'},
         # {'name': 'form', 'width': 70, 'anchor': 'center'},
         {'name': 'num', 'width': 70, 'anchor': 'center'},
+        {'name': 'method', 'width': 90, 'anchor': 'center'},
         {'name': 'xss', 'width': 70, 'anchor': 'center'},
     ]
 
@@ -51,6 +52,9 @@ class CustomTreeView:
     def append_data(self, row_data):
         if 'num' not in row_data:
             row_data['num'] = ''
+        if 'method' not in row_data:
+            row_data['method'] = ''
+            
         values = (
             row_data['id'],
             # row_data['domain'],
@@ -58,6 +62,7 @@ class CustomTreeView:
             # row_data['inner'],
             # row_data['form'],
             row_data['num'],
+            row_data['method'],
         )
         self.tree.insert('', 'end', values=values)
 
