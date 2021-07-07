@@ -180,6 +180,7 @@ class App:
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
+        self.form_urls = []
 
     def get_urls_based_of_approach(self):
         if self.chbox_load_from_file.instate(['!selected']):
@@ -249,7 +250,7 @@ class App:
             if webpage.number_of_forms > 0:
                 for i, form in enumerate(webpage.forms):
                     data = {
-                        'id': len(self.urls)+1,
+                        'id': len(self.form_urls)+1,
                         # 'domain': f'domain',
                         'url': webpage.page_url,
                         # 'inner': True,
@@ -258,23 +259,30 @@ class App:
                         'method': form.method.upper(),
                     }
                     self.tree_urls.append_data(data)
-                    self.urls.append(data)
+                    self.form_urls.append(data)
+
+        def middleware_save_form_url_to_file(webpage):
+            if webpage.number_of_forms > 0:
+                with open('saved_data/urls_with_form.txt', 'a+') as writer:
+                    writer.write(webpage.page_url + '\n')
 
         def thread_find_all_form_urls():
             all_urls = list(map(lambda item: item['url'], all_urls_dict_list))
-            get_forms_of_all_pages_to_objs(all_urls, self.driver, middlewares=[middleware_get_webpage_obj])
+            get_forms_of_all_pages_to_objs(all_urls, self.driver, middlewares=[middleware_get_webpage_obj, middleware_save_form_url_to_file])
 
         x = threading.Thread(target=thread_find_all_form_urls)
         x.start()
 
     def get_form_urls_based_of_approach(self):
         if self.chbox_load_forms_from_file.instate(['!selected']):
+            with open('saved_data/urls_with_form.txt', 'w') as writer:
+                pass
             self.start_find_form_urls()
         else:
             self.clear_urls()
             for url in get_all_form_urls_of_file():
                 data = {
-                    'id': len(self.urls)+1,
+                    'id': len(self.form_urls)+1,
                     # 'domain': f'domain',
                     'url': url,
                     # 'inner': True,
