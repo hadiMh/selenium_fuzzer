@@ -306,7 +306,7 @@ class App:
         if not self.driver:
             self.driver = setup_driver(wait_for_full_load=False)
 
-        def middleware_add_found_xss_url_to_treeview(url, all_xss_attack_forms):
+        def middleware_add_found_xss_url_to_treeview(url_data, all_xss_attack_forms):
             for xss_form in all_xss_attack_forms:
                 data = {
                     'id': len(self.form_urls)+1,
@@ -321,9 +321,9 @@ class App:
                 self.tree_urls.append_data(data)
                 self.xss_urls.append(data)
 
-        def middleware_add_found_xss_url_to_file(url, all_xss_attack_forms):
+        def middleware_add_found_xss_url_to_file(url_data, all_xss_attack_forms):
             with open('saved_data/xss_urls.txt', 'a+') as writer:
-                writer.write(url + '\n')
+                writer.write(url_data['url'] + '\n')
 
         def thread_xss_attack_all_urls():
             xss_attack_all_urls(self.form_urls, self.driver, middlewares=[middleware_add_found_xss_url_to_treeview, middleware_add_found_xss_url_to_file])
