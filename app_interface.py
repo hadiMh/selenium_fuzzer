@@ -102,40 +102,6 @@ class GetUrlSettingsPanel:
         else:
             return False, ''
 
-    # def find_all_urls_of_website(self):
-    #     is_valid, url = self.get_url()
-
-    #     print('finding... now')
-
-    # def create_find_all_urls_panel(self):
-    #     self.btn_find_all_urls = ttk.Button(
-    #         self.main_frame,
-    #         text='Find Urls of This Website',
-    #         command=self.find_all_urls_of_website,
-    #         padding=(10, 5, 10, 5),
-    #     )
-    #     self.btn_find_all_urls.grid(row=1, column=0)
-
-
-# class FindAllUrlsPanel:
-#     def __init__(self, master, get_url_callback):
-#         self.master = master
-#         self.get_url_callback = get_url_callback
-
-#         self.main_frame = ttk.Frame(self.master, )
-#         self.main_frame.pack(side=tk.LEFT, fill=tk.BOTH)
-
-#         self.btn_find_all_urls = ttk.Button(
-#             self.main_frame,
-#             text='Find Urls of This Website',
-#             command=self.find_all_urls_of_website,
-#             padding=(10, 5, 10, 5),
-#         )
-#         self.btn_find_all_urls.grid(row=0, column=0)
-
-#     def find_all_urls_of_website(self):
-#         is_valid, url = self.get_url_callback()
-
 
 class App:
     def __init__(self, master):
@@ -192,18 +158,6 @@ class App:
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
-
-    # def add_random_data_to_urls_tree(self):
-    #     import random
-    #     i = random.randint(1, 100)
-    #     row_data = {
-    #         'id': i,
-    #         'domain': f'domain{i}',
-    #         'url': f'url{i}' + '' if i != 1 else 'h'*300,
-    #         'inner': True if i % 3 == 0 else False,
-    #         'form': True if i % 3 == 2 else False,
-    #     }
-    #     self.tree_urls.append_data(row_data)
 
     def get_urls_based_of_approach(self):
         if self.chbox_load_from_file.state()[0] == 'alternate':
