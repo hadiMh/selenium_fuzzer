@@ -5,7 +5,7 @@ from tkinter import N, E, S, W
 import re
 import validators
 
-from fuzzer.collect_all_website_urls import setup_driver
+from fuzzer.collect_all_website_urls import setup_driver, find_all_urls_of_website
 from gui_interface.urls_list_treeview import CustomTreeView
 
 
@@ -81,7 +81,7 @@ class GetUrlSettingsPanel:
 
         valid = validators.url('http://' + url)
 
-        return valid, 'http://' + url
+        return valid, url
 
     def show_message_check_url(self):
         valid, _ = self.is_entered_url_valid()
@@ -196,13 +196,27 @@ class App:
             self.panel_fuzzer_settings.show_message_check_url()
             return
 
-        self.tree_urls.append_data({
-            'id': 1,
-            'domain': f'domain {url}',
-            'url': url,
-            'inner': True,
-            'form': False,
-        })
+        if not self.driver:
+            self.driver = setup_driver(wait_for_full_load=False)
+
+        def add_url_to_treeview(url):
+            self.tree_urls.append_data({
+                'id': self.tree_urls.tree_rows_count+1,
+                'domain': f'domain',
+                'url': url,
+                'inner': True,
+                'form': False,
+            })
+
+        def thread_func_find_all_website_urls():
+            all_urls = [f'http://www.{url}']
+            all_explored_urls = []
+            find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview])
+
+        import threading
+
+        x = threading.Thread(target=thread_func_find_all_website_urls)
+        x.start()
 
     def open_browser(self):
         is_valid, url = self.panel_fuzzer_settings.get_url()
@@ -212,7 +226,7 @@ class App:
             return
 
         if not self.driver:
-            self.driver = setup_driver()
+            self.driver = setup_driver(wait_for_full_load=False)
             self.driver.get(url)
 
 

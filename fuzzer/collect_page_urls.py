@@ -77,24 +77,24 @@ def find_all_urls_of_single_webpage(website_url, driver, prefix='http://www.'):
 
     re_result = re.search("^(?:https?:\/\/)?(?:[^@\/\n]+@)?(?:www\.)?([^:\/?\n]+)", website_url)
     root_url = re_result.group(0)
-
-    print(f'{prefix}{website_url}'.split(' '))
+    # print('--??--', website_url, prefix, root_url)
+    # print(f'{prefix}{website_url}'.split(' '))
 
     driver.get(f'{prefix}{website_url}')
 
     a_elements = get_all_a_tags_on_this_page(driver)
-    print(f'There are {len(a_elements)} <a> tags on this page.')
+    # print(f'There are {len(a_elements)} <a> tags on this page.')
 
     urls = get_all_href_from_a_elements(a_elements)
     main_urls = filter_only_urls_of_this_website(urls, root_url)
-    print(f'{len(main_urls)} urls are Inside urls.')
+    # print(f'{len(main_urls)} urls are Inside urls.')
 
     all_unique_urls = list(set(main_urls))
-    print(f'{len(main_urls) - len(all_unique_urls)} where duplicate')
+    # print(f'{len(main_urls) - len(all_unique_urls)} where duplicate')
 
     without_hashtag_urls = remove_hashtag_from_urls(all_unique_urls)
-    print(f'{len(all_unique_urls) - len(without_hashtag_urls)} has # and are duplicates.')
-    print(f'Final result: total pure links = {len(without_hashtag_urls)}')
+    # print(f'{len(all_unique_urls) - len(without_hashtag_urls)} has # and are duplicates.')
+    # print(f'Final result: total pure links = {len(without_hashtag_urls)}')
 
     return without_hashtag_urls
 
@@ -110,4 +110,4 @@ if __name__ == '__main__':
     else:
         url = 'python.org'
     urls = find_all_urls_of_single_webpage(url, driver)
-    print('\n\r'.join(urls))
+    # print('\n\r'.join(urls))

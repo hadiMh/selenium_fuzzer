@@ -6,7 +6,7 @@ from .collect_page_urls import find_all_urls_of_single_webpage
 from .helpers import setup_driver
 
 
-def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
+def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewares=None):
     """
     Finds all the urls of a website by searching all the urls of each page recursively.
 
@@ -30,34 +30,37 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
         writer.write(all_urls[0]+'\n')
 
         while len(all_urls) != 0:
-            print('-' * 20)
-            print(f'All urls list length: {len(all_urls)}')
+            # print('-' * 20)
+            # print(f'All urls list length: {len(all_urls)}')
 
             popped_url = all_urls[0]
-            print(f'Url: {popped_url}\n')
+            # print(f'Url: {popped_url}\n')
 
             if popped_url not in all_explored_urls:
                 # add this url to explored urls list so we know it is already explored.
                 all_explored_urls.append(popped_url)
-                print(f'Exploring url: {popped_url}')
+                # print(f'Exploring url: {popped_url}')
 
                 popped_url = popped_url       \
                     .replace('www.', '')      \
                     .replace('https://', '')  \
                     .replace('http://', '')
 
-                urls_of_this_page = find_all_urls_of_single_webpage(popped_url, driver)
-                print(f'Found {len(urls_of_this_page)} urls on this page.')
+                urls_of_this_page = find_all_urls_of_single_webpage(popped_url.strip("/"), driver)
+                # print(f'Found {len(urls_of_this_page)} urls on this page.')
 
                 new_found_urls = list(set(urls_of_this_page).difference(set(all_urls+all_explored_urls)))
-                print(f'{len(new_found_urls)} urls are new.')
+                # print(f'{len(new_found_urls)} urls are new.')
 
                 all_urls.extend(new_found_urls)
 
                 for url in new_found_urls:
                     writer.write(url + '\n')
+                    if middlewares is not None:
+                        for middleware in middlewares:
+                            middleware(url)
 
-                print(f'Added {len(new_found_urls)} new urls to all urls list. all urls list new length is: {len(all_urls)}')
+                # print(f'Added {len(new_found_urls)} new urls to all urls list. all urls list new length is: {len(all_urls)}')
             else:
                 print('This url is already explored.')
 
@@ -67,14 +70,14 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None):
 
 
 if __name__ == '__main__':
-    all_urls = ['http://www.google.com/']
+    all_urls = ['http://www.fronthooks.ir/']
 
     import sys
 
     if len(sys.argv) > 1:
         all_urls = [sys.argv[1]]
     else:
-        print('You should enter a url as the first input.')
+        # print('You should enter a url as the first input.')
         sys.exit(1)
 
     driver = setup_driver()
@@ -83,7 +86,7 @@ if __name__ == '__main__':
     all_explored_urls = []
 
     all_exp_urls = find_all_urls_of_website(all_urls, driver, all_explored_urls)
-    print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
-    print(all_exp_urls)
+    # print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
+    # print(all_exp_urls)
 
     driver.quit()

@@ -17,6 +17,7 @@ class CustomTreeView:
         self.master.grid_rowconfigure(0, weight=1)
 
         self.tree = ttk.Treeview(self.master)
+        self.tree_rows_count = 0
         self.tree.grid(column=0, row=0, sticky='nsew')
 
         self.format_tree_columns()
@@ -55,6 +56,7 @@ class CustomTreeView:
             row_data['form'],
         )
         self.tree.insert('', 'end', values=values)
+        self.tree_rows_count += 1
 
         self.tree.yview_moveto(1)
 
