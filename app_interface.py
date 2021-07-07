@@ -11,6 +11,7 @@ from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
 
 from fuzzer.helpers import setup_driver, get_all_urls_of_file, get_all_form_urls_of_file
 from fuzzer.collect_all_website_urls import find_all_urls_of_website
+from fuzzer.xss_attack_all_urls import xss_attack_all_urls
 from gui_interface.urls_list_treeview import CustomTreeView
 
 
@@ -174,6 +175,13 @@ class App:
         )
         self.btn_get_forms_of_urls.grid(row=0, column=1)
 
+        self.btn_check_all_forms_urls_for_xss = ttk.Button(
+            self.frm_get_from_urls,
+            text='Perform XSS Check',
+            command=self.perform_xss_attack_on_form_urls
+        )
+        self.btn_check_all_forms_urls_for_xss.grid(row=0, column=2, padx=10, pady=10)
+
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
         self.frm_treeview.grid(row=3, column=0, padx=10, pady=10)
@@ -181,6 +189,7 @@ class App:
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
         self.form_urls = []
+        self.xss_urls = []
 
     def get_urls_based_of_approach(self):
         if self.chbox_load_from_file.instate(['!selected']):
@@ -289,7 +298,38 @@ class App:
                     # 'form': None,
                 }
                 self.tree_urls.append_data(data)
-                self.urls.append(data)
+                self.form_urls.append(data)
+
+    def perform_xss_attack_on_form_urls(self):
+        self.clear_urls()
+
+        if not self.driver:
+            self.driver = setup_driver(wait_for_full_load=False)
+
+        def middleware_add_found_xss_url_to_treeview(url, all_xss_attack_forms):
+            for xss_form in all_xss_attack_forms:
+                data = {
+                    'id': len(self.form_urls)+1,
+                    # 'domain': f'domain',
+                    'url': xss_form.page_url,
+                    # 'inner': True,
+                    # 'form': None,
+                    # 'num': f'{webpage.number_of_forms}',
+                    'method': xss_form.method.upper(),
+                    'xss': True,
+                }
+                self.tree_urls.append_data(data)
+                self.xss_urls.append(data)
+
+        def middleware_add_found_xss_url_to_file(url, all_xss_attack_forms):
+            with open('saved_data/xss_urls.txt', 'a+') as writer:
+                writer.write(url + '\n')
+
+        def thread_xss_attack_all_urls():
+            xss_attack_all_urls(self.form_urls, self.driver, middlewares=[middleware_add_found_xss_url_to_treeview, middleware_add_found_xss_url_to_file])
+
+        x = threading.Thread(target=thread_xss_attack_all_urls)
+        x.start()
 
 
 def main():

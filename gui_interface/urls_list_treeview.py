@@ -54,6 +54,8 @@ class CustomTreeView:
             row_data['num'] = ''
         if 'method' not in row_data:
             row_data['method'] = ''
+        if 'xss' not in row_data:
+            row_data['xss'] = ''
             
         values = (
             row_data['id'],
@@ -63,6 +65,7 @@ class CustomTreeView:
             # row_data['form'],
             row_data['num'],
             row_data['method'],
+            row_data['xss'],
         )
         self.tree.insert('', 'end', values=values)
 

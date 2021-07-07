@@ -5,8 +5,8 @@ import string
 import random
 from termcolor import colored
 
-from html_classes import WebPage, Input, Form
-from helpers import setup_driver
+from .html_classes import WebPage, Input, Form
+from .helpers import setup_driver
 
 
 def get_random_number():
@@ -46,6 +46,8 @@ def generate_random_tag_with_id(selenium_input_obj):
 
 
 def url_xss_attack_test(url, driver):
+    found_xss_vulnerability_forms = []
+
     driver.get(url)
 
     webpage_obj = WebPage(url, driver=driver)
@@ -58,7 +60,8 @@ def url_xss_attack_test(url, driver):
         form = forms[i]
 
         print('Now on this form:')
-        print(Form(url, form))
+        this_form = Form(url, form)
+        print(this_form)
 
         inputs = form.find_elements_by_tag_name('input,textarea')
         inputs = list(filter(lambda selenium_input: Input(selenium_input).input_type != 'submit', inputs))
@@ -85,10 +88,12 @@ def url_xss_attack_test(url, driver):
                 print(colored('Found XSS vulnerability.', 'yellow'))
                 print('-'*24)
                 print(random_tag.input)
+                found_xss_vulnerability_forms.append(this_form)
 
+    return found_xss_vulnerability_forms
 
 
 if __name__ == "__main__":
     driver = setup_driver()
 
-    url_xss_attack_test('https://xss-quiz.int21h.jp/?sid=212b14f2038eb29fbc680bace7c279380a12b8ab', driver)
+    url_xss_attack_test('https://xss-quiz.int21h.jp', driver)
