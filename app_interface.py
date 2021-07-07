@@ -248,6 +248,7 @@ class App:
                     'url': webpage.page_url,
                     # 'inner': True,
                     # 'form': None,
+                    'num': webpage.number_of_forms,
                 }
                 self.tree_urls.append_data(data)
                 self.urls.append(data)

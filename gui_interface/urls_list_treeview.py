@@ -6,9 +6,10 @@ class CustomTreeView:
     columns_data = [
         {'name': 'id', 'width': 50, 'anchor': 'center'},
         # {'name': 'domain', 'width': 150, 'anchor': 'w'},
-        {'name': 'full_url', 'width': 1000, 'anchor': 'w'},
+        {'name': 'full_url', 'width': 800, 'anchor': 'w'},
         # {'name': 'inner', 'width': 70, 'anchor': 'center'},
         # {'name': 'form', 'width': 70, 'anchor': 'center'},
+        {'name': 'num', 'width': 70, 'anchor': 'center'},
     ]
 
     def __init__(self, master):
@@ -47,12 +48,15 @@ class CustomTreeView:
         self.tree.configure(yscrollcommand=vsb.set) #, xscrollcommand=hsb.set)
 
     def append_data(self, row_data):
+        if 'num' not in row_data:
+            row_data['num'] = ''
         values = (
             row_data['id'],
             # row_data['domain'],
             row_data['url'],
             # row_data['inner'],
             # row_data['form'],
+            row_data['num'],
         )
         self.tree.insert('', 'end', values=values)
 
