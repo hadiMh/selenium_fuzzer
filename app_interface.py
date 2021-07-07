@@ -1,9 +1,13 @@
+import threading
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import N, E, S, W
 
 import re
 import validators
+
+from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
 
 from fuzzer.helpers import setup_driver, get_all_urls_of_file
 from fuzzer.collect_all_website_urls import find_all_urls_of_website
@@ -124,7 +128,7 @@ class App:
 
         self.chbox_load_from_file = ttk.Checkbutton(
             self.frm_find_urls_panel,
-            text='Load from file',
+            text='Load urls from file',
         )
         self.chbox_load_from_file.grid(row=0, column=0, padx=10, pady=10, sticky=(W, ))
 
@@ -152,9 +156,21 @@ class App:
         )
         self.btn_clear_urls.grid(row=0, column=3, padx=10, pady=10, sticky=(W, ))
 
+        self.frm_get_from_urls = ttk.Frame(
+            self.master,
+        )
+        self.frm_get_from_urls.grid(row=2, column=0, padx=10, pady=10, sticky=(W, ))
+
+        self.btn_get_forms_of_urls = ttk.Button(
+            self.frm_get_from_urls,
+            text='Get Forms',
+            command=self.start_find_form_urls,
+        )
+        self.btn_get_forms_of_urls.grid(row=0, column=0)
+
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
-        self.frm_treeview.grid(row=2, column=0, padx=10, pady=10)
+        self.frm_treeview.grid(row=3, column=0, padx=10, pady=10)
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
@@ -188,10 +204,10 @@ class App:
         def add_url_to_treeview(url):
             data = {
                 'id': len(self.urls)+1,
-                'domain': f'domain',
+                # 'domain': f'domain',
                 'url': url,
-                'inner': True,
-                'form': None,
+                # 'inner': True,
+                # 'form': None,
             }
             self.tree_urls.append_data(data)
             self.urls.append(data)
@@ -201,7 +217,6 @@ class App:
             all_explored_urls = []
             find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview])
 
-        import threading
 
         x = threading.Thread(target=thread_func_find_all_website_urls)
         x.start()
@@ -220,6 +235,29 @@ class App:
     def clear_urls(self):
         self.tree_urls.clear_data()
         self.urls.clear()
+
+    def start_find_form_urls(self):
+        all_urls_dict_list = self.urls.copy()
+        self.clear_urls()
+
+        def middleware_get_webpage_obj(webpage):
+            if webpage.number_of_forms > 0:
+                data = {
+                    'id': len(self.urls)+1,
+                    # 'domain': f'domain',
+                    'url': webpage.page_url,
+                    # 'inner': True,
+                    # 'form': None,
+                }
+                self.tree_urls.append_data(data)
+                self.urls.append(data)
+
+        def thread_find_all_form_urls():
+            all_urls = list(map(lambda item: item['url'], all_urls_dict_list))
+            get_forms_of_all_pages_to_objs(all_urls, self.driver, middlewares=[middleware_get_webpage_obj])
+
+        x = threading.Thread(target=thread_find_all_form_urls)
+        x.start()
 
 
 def main():
