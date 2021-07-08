@@ -190,6 +190,12 @@ class App:
         )
         self.frm_extra_settings_panel.grid(row=3, column=0, sticky=(W, ))
 
+        self.lbl_for_blacklist_textbox = ttk.Label(
+            self.frm_extra_settings_panel,
+            text='Urls to Exclude:'
+        )
+        self.lbl_for_blacklist_textbox.grid(row=0, column=0, sticky=(W, ))
+
         self.txt_blacklist_urls = tk.Text(
             self.frm_extra_settings_panel,
             bg='white',
@@ -200,7 +206,7 @@ class App:
             borderwidth=5,
             relief=tk.FLAT,
         )
-        self.txt_blacklist_urls.grid(row=0, column=0, sticky=(W, ))
+        self.txt_blacklist_urls.grid(row=1, column=0, sticky=(W, ))
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
