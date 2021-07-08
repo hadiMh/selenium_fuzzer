@@ -80,7 +80,6 @@ class GetUrlSettingsPanel:
         )
         self.lbl_check_url_result.grid(row=0, column=3)
 
-
     def is_entered_url_valid(self):
         url = self.ent_main_url.get()
         url = url.replace('www.', '') \
@@ -109,6 +108,7 @@ class GetUrlSettingsPanel:
         else:
             return False, ''
 
+
 class UsernameAndPasswordSettings:
     def __init__(self, master, app_obj, driver=None):
         self.master = master
@@ -121,12 +121,26 @@ class UsernameAndPasswordSettings:
         )
         self.frm_container.grid(row=0, column=0)
 
+        self.lbl_login_url = ttk.Label(
+            self.frm_container,
+            text='login url:',
+        )
+        self.lbl_login_url.grid(row=0, column=0, padx=10, pady=10)
+
+        self.ent_login_url = tk.Entry(
+            self.frm_container,
+            borderwidth=8,
+            relief=tk.FLAT,
+            bg='white',
+            fg='black',
+        )
+        self.ent_login_url.grid(row=0, column=1)
+
         self.lbl_username = ttk.Label(
             self.frm_container,
             text='username:',
-            padding=(10, 10, 10, 10),
         )
-        self.lbl_username.grid(row=0, column=0, padx=10, pady=10)
+        self.lbl_username.grid(row=1, column=0, padx=10, pady=10)
 
         self.ent_username = tk.Entry(
             self.frm_container,
@@ -135,13 +149,13 @@ class UsernameAndPasswordSettings:
             bg='white',
             fg='black',
         )
-        self.ent_username.grid(row=0, column=1)
+        self.ent_username.grid(row=1, column=1)
 
         self.lbl_password = ttk.Label(
             self.frm_container,
             text='password:',
         )
-        self.lbl_password.grid(row=1, column=0, padx=10, pady=10)
+        self.lbl_password.grid(row=2, column=0, padx=10, pady=10)
 
         self.ent_password = tk.Entry(
             self.frm_container,
@@ -150,13 +164,13 @@ class UsernameAndPasswordSettings:
             bg='white',
             fg='black',
         )
-        self.ent_password.grid(row=1, column=1)
+        self.ent_password.grid(row=2, column=1)
 
         self.lbl_custom_login = ttk.Label(
             self.frm_container,
             text='Login manually:'
         )
-        self.lbl_custom_login.grid(row=2, column=0, padx=10, pady=10)
+        self.lbl_custom_login.grid(row=3, column=0, padx=10, pady=10)
 
         self.btn_open_browser = ttk.Button(
             self.frm_container,
@@ -164,13 +178,11 @@ class UsernameAndPasswordSettings:
             command=self.open_browser,
             padding=(10, 5, 10, 5),
         )
-        self.btn_open_browser.grid(row=2, column=1, padx=10, pady=10)
-
+        self.btn_open_browser.grid(row=3, column=1, padx=10, pady=10)
 
     def open_browser(self):
         if not self.app_obj.driver:
             self.app_obj.driver = setup_driver(wait_for_full_load=False)
-
 
 
 class App:
@@ -183,9 +195,8 @@ class App:
         )
         self.frm_top_settings.grid(row=0, column=0, sticky=(W, ))
 
-        self.frm_leftpanel = tk.Frame(
+        self.frm_leftpanel = ttk.Frame(
             self.frm_top_settings,
-            bg='green',
             width=20,
             height=200,
         )
@@ -193,7 +204,6 @@ class App:
 
         self.frm_rightpanel = tk.Frame(
             self.frm_top_settings,
-            bg='red',
             width=20,
             height=200,
         )
