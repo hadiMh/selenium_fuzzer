@@ -7,11 +7,12 @@ from tkinter import N, E, S, W
 import re
 import validators
 
-from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
-
 from fuzzer.helpers import setup_driver, get_all_urls_of_file, get_all_form_urls_of_file
+
 from fuzzer.collect_all_website_urls import find_all_urls_of_website
+from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
 from fuzzer.xss_attack_all_urls import xss_attack_all_urls
+
 from gui_interface.urls_list_treeview import CustomTreeView
 
 
@@ -191,7 +192,7 @@ class App:
 
         self.txt_blacklist_urls = tk.Text(
             self.frm_extra_settings_panel,
-            bg='white', 
+            bg='white',
             fg='black',
             width=131,
             height=10,
@@ -251,7 +252,7 @@ class App:
         def thread_func_find_all_website_urls():
             all_urls = [f'http://www.{url}']
             all_explored_urls = []
-            find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview])
+            find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview], blacklist_urls=self.black_list_urls)
 
         x = threading.Thread(target=thread_func_find_all_website_urls)
         x.start()

@@ -1,12 +1,14 @@
+import sys
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 from .collect_page_urls import find_all_urls_of_single_webpage
-from .helpers import setup_driver
+from .helpers import setup_driver, sanitize_urls_based_on_blacklist
 
 
-def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewares=None):
+def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewares=None, blacklist_urls=None):
     """
     Finds all the urls of a website by searching all the urls of each page recursively.
 
@@ -17,7 +19,7 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
 
     :return: List of all of the website urls.
     """
-    
+
     all_urls = root_urls.copy()
 
     assert len(all_urls) > 0, "\nError: You should add at least one url to the all_urls list to have a start point.\n"
@@ -25,6 +27,8 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
     # default value for args
     if all_explored_urls is None:
         all_explored_urls = []
+    if blacklist_urls is None:
+        blacklist_urls = []
 
     with open('saved_data/all_explored_urls.txt', 'w+') as writer:
         writer.write(all_urls[0]+'\n')
@@ -49,10 +53,13 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
                 urls_of_this_page = find_all_urls_of_single_webpage(popped_url.strip("/"), driver)
                 # print(f'Found {len(urls_of_this_page)} urls on this page.')
 
-                new_found_urls = list(set(urls_of_this_page).difference(set(all_urls+all_explored_urls)))
+                # * changing this line. be careful
+                # new_found_urls = list(set(urls_of_this_page).difference(set(all_urls+all_explored_urls)))
+                new_found_urls = sanitize_urls_based_on_blacklist(urls_of_this_page, all_urls+all_explored_urls)
+
                 # print(f'{len(new_found_urls)} urls are new.')
 
-                all_urls.extend(new_found_urls)
+                all_urls.extend(sanitize_urls_based_on_blacklist(new_found_urls, blacklist_urls))
 
                 for url in new_found_urls:
                     writer.write(url + '\n')
@@ -71,8 +78,6 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
 
 if __name__ == '__main__':
     all_urls = ['http://www.fronthooks.ir/']
-
-    import sys
 
     if len(sys.argv) > 1:
         all_urls = [sys.argv[1]]
