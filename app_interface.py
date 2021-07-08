@@ -335,6 +335,7 @@ class App:
 
     def start_find_all_urls(self):
         self.login_based_on_inputs()
+        self.get_blacklist_urls_from_text_box()
         is_valid, url = self.panel_fuzzer_settings.get_url()
 
         if not is_valid:
@@ -380,6 +381,8 @@ class App:
 
     def start_find_form_urls(self):
         self.login_based_on_inputs()
+        self.get_blacklist_urls_from_text_box()
+
         all_urls_dict_list = self.urls.copy()
         self.clear_urls()
 

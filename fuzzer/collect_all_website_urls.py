@@ -58,16 +58,14 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
                 new_found_urls = sanitize_urls_based_on_blacklist(urls_of_this_page, all_urls+all_explored_urls)
 
                 # print(f'{len(new_found_urls)} urls are new.')
+                sanitized_urls = sanitize_urls_based_on_blacklist(new_found_urls, blacklist_urls)
+                all_urls.extend(sanitized_urls)
 
-                all_urls.extend(sanitize_urls_based_on_blacklist(new_found_urls, blacklist_urls))
-
-                for url in new_found_urls:
+                for url in sanitized_urls:
                     writer.write(url + '\n')
                     if middlewares is not None:
                         for middleware in middlewares:
                             middleware(url)
-
-                # print(f'Added {len(new_found_urls)} new urls to all urls list. all urls list new length is: {len(all_urls)}')
             else:
                 print('This url is already explored.')
 

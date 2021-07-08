@@ -74,7 +74,6 @@ def clean_url(url):
 def sanitize_urls_based_on_blacklist(all_urls, blacklist_urls):
     all_urls_mapped = list(map(clean_url, all_urls))
     blacklist_urls_mapped = list(map(clean_url, blacklist_urls))
-
     passed_urls = list(set(all_urls_mapped).difference(set(blacklist_urls_mapped)))
 
     return [f'http://{url}' for url in passed_urls]
@@ -92,7 +91,7 @@ if __name__ == '__main__':
     ]
 
     blacklist_urls = [
-        # 'mybaby.com',
+        # 'today.com',
         # 'www.yesterday.com/sdfasdf/sdfsd/dfdf',
     ]
 
