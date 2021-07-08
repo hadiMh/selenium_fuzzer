@@ -13,6 +13,8 @@ from fuzzer.collect_all_website_urls import find_all_urls_of_website
 from fuzzer.collect_forms import get_forms_of_all_pages_to_objs
 from fuzzer.xss_attack_all_urls import xss_attack_all_urls
 
+from fuzzer.html_classes import WebPage, Form, Input
+
 from gui_interface.urls_list_treeview import CustomTreeView
 
 
@@ -332,6 +334,7 @@ class App:
                 self.urls.append(data)
 
     def start_find_all_urls(self):
+        self.login_based_on_inputs()
         is_valid, url = self.panel_fuzzer_settings.get_url()
 
         if not is_valid:
@@ -376,6 +379,7 @@ class App:
         self.urls.clear()
 
     def start_find_form_urls(self):
+        self.login_based_on_inputs()
         all_urls_dict_list = self.urls.copy()
         self.clear_urls()
 
@@ -407,6 +411,8 @@ class App:
         x.start()
 
     def get_form_urls_based_of_approach(self):
+        self.login_based_on_inputs()
+
         if self.chbox_load_forms_from_file.instate(['!selected']):
             with open('saved_data/urls_with_form.txt', 'w') as writer:
                 pass
@@ -426,6 +432,7 @@ class App:
 
     def perform_xss_attack_on_form_urls(self):
         self.clear_urls()
+        self.login_based_on_inputs()
 
         if not self.driver:
             self.driver = setup_driver(wait_for_full_load=False)
@@ -459,6 +466,52 @@ class App:
         text = self.txt_blacklist_urls.get("1.0", tk.END)
         black_list_urls = list(filter(lambda x: len(x) > 0, text.split('\n')))
         self.black_list_urls.extend(black_list_urls)
+
+
+    def login_based_on_inputs(self):
+        # print(self.panel_username_password.ent_login_url.get())
+        entered_username = self.panel_username_password.ent_username.get()
+        entered_password = self.panel_username_password.ent_password.get()
+
+        login_url = self.panel_username_password.ent_login_url.get()
+        if login_url == '':
+            return
+
+        if not self.driver:
+            self.driver = setup_driver(wait_for_full_load=False)
+
+        # webpage_obj = WebPage(login_url, driver=self.driver)
+
+        self.driver.get(login_url)
+        forms = self.driver.find_elements_by_tag_name('form')
+
+        for form in forms:
+            # form = forms[0]
+            # form = webpage_obj.forms[0]
+
+            print('Found Form:')
+            login_form = Form(login_url, form)
+            print(login_form)
+
+            inputs = form.find_elements_by_tag_name('input,textarea')
+            inputs = list(filter(lambda selenium_input: Input(selenium_input).input_type != 'submit', inputs))
+
+            for input_el in inputs:
+                input_obj = Input(input_el)
+                print(input_obj.input_name, input_obj.input_type)
+
+                if 'password' in input_obj.input_type.lower():
+                    input_el.send_keys(entered_password)
+                elif 'username' in input_obj.input_name.lower():
+                    input_el.send_keys(entered_username)
+
+                # input_el.send_keys(random_tag.get_html_string())
+
+            submit_buttons = form.find_elements_by_tag_name('input[type=submit],button')
+            submit_button = submit_buttons[0]
+            submit_button.click()
+
+        
 
 
 def main():
