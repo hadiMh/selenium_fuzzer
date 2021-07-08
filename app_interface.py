@@ -192,7 +192,7 @@ class App:
 
         self.lbl_for_blacklist_textbox = ttk.Label(
             self.frm_extra_settings_panel,
-            text='Urls to Exclude:'
+            text='Urls to Exclude: (Each url in a separate line)'
         )
         self.lbl_for_blacklist_textbox.grid(row=0, column=0, sticky=(W, ))
 
