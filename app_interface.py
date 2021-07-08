@@ -182,14 +182,34 @@ class App:
         )
         self.btn_check_all_forms_urls_for_xss.grid(row=0, column=2, padx=10, pady=10)
 
+        self.frm_extra_settings_panel = ttk.Frame(
+            self.master,
+            width=100,
+            padding=(10, 10, 10, 10),
+        )
+        self.frm_extra_settings_panel.grid(row=3, column=0, sticky=(W, ))
+
+        self.txt_blacklist_urls = tk.Text(
+            self.frm_extra_settings_panel,
+            bg='white', 
+            fg='black',
+            width=131,
+            height=10,
+            font=('Arial', 10),
+            borderwidth=5,
+            relief=tk.FLAT,
+        )
+        self.txt_blacklist_urls.grid(row=0, column=0, sticky=(W, ))
+
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
-        self.frm_treeview.grid(row=3, column=0, padx=10, pady=10)
+        self.frm_treeview.grid(row=4, column=0, padx=10, pady=10)
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
         self.form_urls = []
         self.xss_urls = []
+        self.black_list_urls = []
 
     def get_urls_based_of_approach(self):
         if self.chbox_load_from_file.instate(['!selected']):
@@ -330,6 +350,11 @@ class App:
 
         x = threading.Thread(target=thread_xss_attack_all_urls)
         x.start()
+
+    def get_blacklist_urls_from_text_box(self):
+        text = self.txt_blacklist_urls.get("1.0", tk.END)
+        black_list_urls = list(filter(lambda x: len(x) > 0, text.split('\n')))
+        self.black_list_urls.extend(black_list_urls)
 
 
 def main():
