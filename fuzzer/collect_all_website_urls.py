@@ -1,3 +1,10 @@
+"""
+This module is for collecting all urls of a website.
+It uses root urls to start scraping. Then for each page it collects all the urls it that page.
+It continues until it collects all the urls of the website.
+Notice that it only checks the urls of the root domain to prevent scraping other domains.
+"""
+
 import sys
 
 from selenium import webdriver

@@ -1,3 +1,9 @@
+"""
+OOP design for WebPage, Form and Input elements.
+Each of these classes captures all the needed parts of each page elements.
+Also they have __str__ magic method to represent a simple view of the html code.
+"""
+
 import os
 
 from selenium import webdriver
@@ -11,7 +17,6 @@ class Input:
         self.is_hidden = True if self.input_type == 'hidden' else False
         self.input_name = selenium_input_obj.get_attribute('name')
         self.placeholder = selenium_input_obj.get_attribute('placeholder')
-        # ? check if it works all the time
         self.required = True if selenium_input_obj.get_attribute('required') else False
 
     def __str__(self):
@@ -39,8 +44,7 @@ class Form:
         self.selenium_form_obj = selenium_form_obj
 
         submit_buttons = selenium_form_obj.find_elements_by_css_selector('input[type=submit]')
-        # TODO: remember to implement <button> type of submit alongsile <input type="submit">
-        # submit_buttons = selenium_form_obj.find_elements_by_tag_name('button')
+
         if len(submit_buttons) > 0:
             self.submit_button = Input(submit_buttons[0])
         else:

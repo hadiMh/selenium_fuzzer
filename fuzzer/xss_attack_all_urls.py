@@ -1,3 +1,7 @@
+"""
+The code to perform XSS attack on all the given urls.
+"""
+
 from .xss_attack_single_url import url_xss_attack_test
 
 def xss_attack_all_urls(all_urls, driver, middlewares=[]):

@@ -1,3 +1,24 @@
+"""
+By: M.Hadi Hajihosseini | https://github.com/hadiMh/selenium_fuzzer
+
+Run this file to see the App Interface of this program.
+This program has 7 steps:
+    1. Enter the Url of a page of the website.
+    2. If it needs to login, enter the credentials and the login url on the right.
+    3. Enter all the urls to exclude from being scraped by entering them in the "Urls to Exclude" textarea. (separate each url with new line)
+    4. Click on the "Find Urls of This Website. It will collect all the urls of the website.
+    5. After it finished, Click on the "Get Forms". It will collect all the urls of the previous step that contains at least one form.
+    6. After the last step finished click on the "Perform XSS Check". It will check all the urls of the previous step (they all contain at least one form) and check for XSS vulnerability of all the forms.
+    7. The vulnerable forms get printed with their url and form method on the list.
+
+Notes:
+    * Notice that each step results are getting saved on files for further usage.
+    * You can use "Load" checkboxes to load urls from the saved files of previous runs.
+    * You can login manually by clicking on the "Login manually: Open Browser" button.
+    * If you are using login section, remember to enter the logout url in to "Urls to Exclude" to stop the scraper from logging out.
+    * You can check the entered url correctness by clicking on the "Check URL" button.
+"""
+
 import threading
 import re
 import validators

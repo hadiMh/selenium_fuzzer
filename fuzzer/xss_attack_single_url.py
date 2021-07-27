@@ -1,3 +1,8 @@
+"""
+Perform XSS attack on all of the forms of a single page.
+It finds the XSS vulnerability of any form in the page.
+"""
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 

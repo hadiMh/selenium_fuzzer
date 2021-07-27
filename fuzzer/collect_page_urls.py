@@ -1,3 +1,8 @@
+"""
+Collect all urls of a single webpage. Notice that it sanitizes the urls from any hashtag character if there is any to don't collect duplicate urls.
+It only collect the urls of the same domain as root url.
+"""
+
 import re
 
 

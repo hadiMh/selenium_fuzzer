@@ -1,3 +1,14 @@
+"""
+The TreeView design based on tkinter.
+A list of rows and columns to show all the urls with their specific data.
+Columns are:
+    Id (number of the row),
+    Full Url,
+    Num (for form number in the page),
+    Method (the form method: POST, GET),
+    XSS (True of False for XSS)
+"""
+
 import tkinter as tk
 from tkinter import ttk
 
