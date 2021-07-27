@@ -546,6 +546,7 @@ class App:
 
 def main():
     window = tk.Tk()
+    window.title('Fuzzer by M.Hadi Hajihosseini')
     main_frame = ttk.Frame(window, width=500, height=500)
     main_frame.grid(row=0, column=0)
 

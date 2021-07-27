@@ -4,13 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-selenium = "*"
-jupyter = "*"
-termcolor = "*"
-validators = "*"
+selenium = "==3.141.0"
+termcolor = "==1.1.0"
+validators = "==0.18.2"
+decorator = "==5.0.9"
+six = "==1.16.0"
+urllib3 = "==1.26.6"
 
 [dev-packages]
 autopep8 = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
