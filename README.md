@@ -8,26 +8,57 @@ This tool is for finding XSS vulnerabilities on websites. It gets the website ur
 It uses Selenium as the Scraping tool.
 
 ## How to run the app
-First install the [Pipenv](https://pipenv.pypa.io) by this command:
 
-```console
-$ pip install pipenv
-```
+1. Using Pipenv (recommended)
 
-Then clone the project to your local machine.
+    First install the [Pipenv](https://pipenv.pypa.io) by this command:
 
-```console
-$ git clone https://github.com/hadiMh/selenium_fuzzer.git
-```
+    ```console
+    $ pip install pipenv
+    ```
 
-Then install the required packages with the command below:
+    Then clone the project to your local machine.
 
-```console
-$ pipenv install
-```
+    ```console
+    $ git clone https://github.com/hadiMh/selenium_fuzzer.git
+    ```
 
-And you are good to go :)
+    Then install the required packages with the command below:
 
+    ```console
+    $ pipenv install
+    ```
+
+    And you are good to go :)
+
+2. Using virtualenv
+
+    First install virtualenv by this command:
+
+    ```console
+    $ pip install virtualenv
+    ```
+
+    Then clone the project to your local machine.
+
+    ```console
+    $ git clone https://github.com/hadiMh/selenium_fuzzer.git
+    ```
+
+    Then create the virtual environment in the project folder:
+
+    This will create a venv folder in your project and then activates it.
+
+    ```console
+    $ virtualenv venv
+    $ source venv/bin/activate
+    ```
+
+    Then install the required packages with the command below:
+
+    ```console
+    (venv) $ pip install -r requirements.txt
+    ```
 # Usage
 
 The only step needed is to run the UI of the app.
