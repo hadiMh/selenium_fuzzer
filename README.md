@@ -1,6 +1,6 @@
 # Web Fuzzing Tool
-![python version](https://img.shields.io/github/pipenv/locked/python-version/hadiMh/selenium_fuzzer?color=blue&logo=python&logoColor=white)
-![selenium version](https://img.shields.io/pypi/v/selenium?color=green&label=Selenium&logo=Selenium&logoColor=white)
+![python version](https://img.shields.io/github/pipenv/locked/python-version/hadiMh/selenium_fuzzer?color=2196F3&logo=python&logoColor=white)
+![selenium version](https://img.shields.io/badge/dynamic/json?color=2196F3&label=Selenium&query=%24.default.selenium.version&url=https%3A%2F%2Fraw.githubusercontent.com%2FhadiMh%2Fselenium_fuzzer%2Fmain%2FPipfile.lock&logo=Selenium&logoColor=white)
 ![code size](https://img.shields.io/github/languages/code-size/hadiMh/selenium_fuzzer?color=2196F3)
 
 This tool is for finding XSS vulnerabilities on websites. It gets the website url, the login credentials if needed and the urls to exclude and then starts to crawl the website to find any XSS vulnerabilities.
