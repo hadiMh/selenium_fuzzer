@@ -69,7 +69,7 @@ $ python3 app_interface.py
 
 The above code will run the program below:
 
-![image of fuzzing tool main UI empty fields](https://user-images.githubusercontent.com/36237368/127122669-befdb64e-0559-4320-bc69-d93577f8d859.png)
+![image of fuzzing tool main UI empty fields](https://user-images.githubusercontent.com/36237368/127186920-6480c1db-d7c0-4dc4-8eb1-561dc8e74ad9.png)
 
 
 
@@ -90,7 +90,7 @@ The above code will run the program below:
 
 # How to use the app by details
 
-![](https://user-images.githubusercontent.com/36237368/127126080-7b9f898b-12eb-4974-a63c-f7ec6ee602df.png)
+![](https://user-images.githubusercontent.com/36237368/127187507-ee7bc05e-de54-4f81-8689-ef8eceae2248.png)
 
 1. Enter the url of a webpage of the target website.
     - You can check the correctness of the url with the "Check URL" button on the right.

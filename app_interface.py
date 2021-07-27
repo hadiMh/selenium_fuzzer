@@ -305,32 +305,31 @@ class App:
 
         self.frm_extra_settings_panel = ttk.Frame(
             self.master,
-            width=100,
             padding=(10, 10, 10, 10),
         )
-        self.frm_extra_settings_panel.grid(row=4, column=0, sticky=(W, ))
+        self.frm_extra_settings_panel.grid(row=4, column=0, sticky=(W, E, ), )
 
         self.lbl_for_blacklist_textbox = ttk.Label(
             self.frm_extra_settings_panel,
-            text='Urls to Exclude: (Each url in a separate line)'
+            text='Urls to Exclude: (Each url in a separate line)',
         )
-        self.lbl_for_blacklist_textbox.grid(row=0, column=0, sticky=(W, ))
+        self.lbl_for_blacklist_textbox.grid(row=0, column=0, sticky=(W, E, ), )
 
         self.txt_blacklist_urls = tk.Text(
             self.frm_extra_settings_panel,
             bg='white',
             fg='black',
-            width=131,
             height=10,
             font=('Arial', 10),
             borderwidth=5,
             relief=tk.FLAT,
+            width=150,
         )
-        self.txt_blacklist_urls.grid(row=1, column=0, sticky=(W, ))
+        self.txt_blacklist_urls.grid(row=1, column=0, sticky=(W, E, ), )
 
         # * create treeview panel
         self.frm_treeview = ttk.Frame(self.master)
-        self.frm_treeview.grid(row=5, column=0, padx=10, pady=10)
+        self.frm_treeview.grid(row=5, column=0, padx=10, pady=10, sticky=(W, E, ))
 
         self.tree_urls = CustomTreeView(self.frm_treeview)
         self.urls = []
