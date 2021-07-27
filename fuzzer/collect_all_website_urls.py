@@ -1,4 +1,5 @@
 import sys
+import time
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -66,6 +67,8 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
                     if middlewares is not None:
                         for middleware in middlewares:
                             middleware(url)
+
+                # time.sleep(1)
             else:
                 print('This url is already explored.')
 
@@ -75,7 +78,7 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
 
 
 if __name__ == '__main__':
-    all_urls = ['http://www.fronthooks.ir/']
+    all_urls = ['http://www.google.com/']
 
     if len(sys.argv) > 1:
         all_urls = [sys.argv[1]]

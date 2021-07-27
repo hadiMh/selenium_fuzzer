@@ -1,11 +1,11 @@
 import threading
+import re
+import validators
+import time
 
 import tkinter as tk
 from tkinter import ttk
 from tkinter import N, E, S, W
-
-import re
-import validators
 
 from fuzzer.helpers import setup_driver, get_all_urls_of_file, get_all_form_urls_of_file
 
@@ -108,7 +108,7 @@ class GetUrlSettingsPanel:
         if valid == True:
             return True, url
         else:
-            return False, ''
+            return False, url
 
 
 class UsernameAndPasswordSettings:
@@ -338,9 +338,9 @@ class App:
         self.get_blacklist_urls_from_text_box()
         is_valid, url = self.panel_fuzzer_settings.get_url()
 
-        if not is_valid:
-            self.panel_fuzzer_settings.show_message_check_url()
-            return
+        # if not is_valid:
+        #     self.panel_fuzzer_settings.show_message_check_url()
+        #     return
 
         if not self.driver:
             self.driver = setup_driver(wait_for_full_load=False)
@@ -357,7 +357,7 @@ class App:
             self.urls.append(data)
 
         def thread_func_find_all_website_urls():
-            all_urls = [f'http://www.{url}']
+            all_urls = [f'http://{url}']
             all_explored_urls = []
             find_all_urls_of_website(all_urls, self.driver, all_explored_urls, middlewares=[add_url_to_treeview], blacklist_urls=self.black_list_urls)
 
@@ -400,6 +400,7 @@ class App:
                     }
                     self.tree_urls.append_data(data)
                     self.form_urls.append(data)
+                    # time.sleep(2)
 
         def middleware_save_form_url_to_file(webpage):
             if webpage.number_of_forms > 0:
@@ -505,8 +506,13 @@ class App:
 
                 if 'password' in input_obj.input_type.lower():
                     input_el.send_keys(entered_password)
-                elif 'username' in input_obj.input_name.lower():
-                    input_el.send_keys(entered_username)
+                # elif 'username' in input_obj.input_name.lower():
+                #     input_el.send_keys(entered_username)
+                else:
+                    try:
+                        input_el.send_keys(entered_username)
+                    except:
+                        print('Except here')
 
                 # input_el.send_keys(random_tag.get_html_string())
 

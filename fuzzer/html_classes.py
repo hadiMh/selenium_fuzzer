@@ -58,11 +58,10 @@ class Form:
         
         return (
             f'(Page Url = {self.page_url})\n\n'
-            f'<form method="{self.method}" action="{self.action}">\n'
+            f'\n<form method="{self.method}" action="{self.action}">\n'
             f'\t{(os.linesep+tab).join([str(inp) for inp in self.inputs_list if inp.input_type != "submit"])}'
             '\n'
             f'\n\t{str(self.submit_button)}'
-            f'\n</form>'
         )
 
     def get_request_method(self):

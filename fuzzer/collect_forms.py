@@ -5,6 +5,7 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from .html_classes import Form, Input, WebPage
 from .helpers import setup_driver, get_all_urls_of_file
 
+import time
 
 def get_forms_of_all_pages_to_objs(all_urls, driver, middlewares=None):
     """
@@ -20,6 +21,8 @@ def get_forms_of_all_pages_to_objs(all_urls, driver, middlewares=None):
         if middlewares is not None:
             for middleware in middlewares:
                 middleware(webpage_obj)
+
+        # time.sleep(2)
 
     return all_web_pages_objs
 

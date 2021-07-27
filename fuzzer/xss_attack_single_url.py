@@ -3,6 +3,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import string
 import random
+import time
 from termcolor import colored
 
 from .html_classes import WebPage, Input, Form
@@ -58,7 +59,7 @@ def url_xss_attack_test(url, driver):
 
         forms = driver.find_elements_by_tag_name('form')
         form = forms[i]
-
+        # time.sleep(1)
         print('Now on this form:')
         this_form = Form(url, form)
         print(this_form)
@@ -69,26 +70,36 @@ def url_xss_attack_test(url, driver):
         random_tags = []
 
         for input_el in inputs:
+            # time.sleep(1)
+
             random_tag: HtmlTag = generate_random_tag_with_id(input_el)
             random_tags.append(random_tag)
 
             input_el.send_keys(random_tag.get_html_string())
 
+            # time.sleep(2)
+
         submit_buttons = form.find_elements_by_tag_name('input[type=submit],button')
         submit_button = submit_buttons[0]
-        submit_button.click()
 
-        WebDriverWait(driver, 15).until(EC.url_changes(current_url))
+        # time.sleep(2)
+        try:
+            submit_button.click()
+            # WebDriverWait(driver, 15).until(EC.url_changes(current_url))
 
-        for random_tag in random_tags:
-            found_xss_tags = driver.find_elements_by_xpath(f'//h1[@id="{random_tag.tag_id}"]')
+            for random_tag in random_tags:
+                found_xss_tags = driver.find_elements_by_xpath(f'//h1[@id="{random_tag.tag_id}"]')
 
-            if len(found_xss_tags) > 0:
-                print('-'*24)
-                print(colored('Found XSS vulnerability.', 'yellow'))
-                print('-'*24)
-                print(random_tag.input)
-                found_xss_vulnerability_forms.append(this_form)
+                if len(found_xss_tags) > 0:
+                    print('-'*24)
+                    print(colored('Found XSS vulnerability.', 'yellow'))
+                    print('-'*24)
+                    print(random_tag.input)
+                    found_xss_vulnerability_forms.append(this_form)
+        except:
+            print('Here in the error zone')
+
+
 
     return found_xss_vulnerability_forms
 

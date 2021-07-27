@@ -67,7 +67,7 @@ def remove_hashtag_from_urls(list_of_urls):
     return list(set(final_urls))
 
 
-def find_all_urls_of_single_webpage(website_url, driver, prefix='http://www.'):
+def find_all_urls_of_single_webpage(website_url, driver, prefix='http://'):
     """
     Find all unique links in a webpage.
     This function checks that urls with # at the last part of the url are not seperate urls from the ones without sharp character.
