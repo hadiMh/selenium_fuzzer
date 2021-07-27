@@ -12,7 +12,7 @@ This program has 7 steps:
     7. The vulnerable forms get printed with their url and form method on the list.
 
 Notes:
-    * Notice that each step results are getting saved on files for further usage.
+    * Notice that each step results are getting saved on files for further usage (in saved_data directory).
     * You can use "Load" checkboxes to load urls from the saved files of previous runs.
     * You can login manually by clicking on the "Login manually: Open Browser" button.
     * If you are using login section, remember to enter the logout url in to "Urls to Exclude" to stop the scraper from logging out.
