@@ -5,10 +5,7 @@ from tkinter import ttk
 class CustomTreeView:
     columns_data = [
         {'name': 'id', 'width': 50, 'anchor': 'center'},
-        # {'name': 'domain', 'width': 150, 'anchor': 'w'},
         {'name': 'full_url', 'width': 900, 'anchor': 'w'},
-        # {'name': 'inner', 'width': 70, 'anchor': 'center'},
-        # {'name': 'form', 'width': 70, 'anchor': 'center'},
         {'name': 'num', 'width': 70, 'anchor': 'center'},
         {'name': 'method', 'width': 90, 'anchor': 'center'},
         {'name': 'xss', 'width': 70, 'anchor': 'center'},
@@ -42,12 +39,10 @@ class CustomTreeView:
 
     def add_scrollbars_to_tree(self):
         vsb = ttk.Scrollbar(self.master, orient="vertical", command=self.tree.yview)
-        # hsb = ttk.Scrollbar(self.master, orient="horizontal", command=self.tree.xview)
 
         vsb.grid(column=1, row=0, sticky='ns')
-        # hsb.grid(column=0, row=1, sticky='ew')
 
-        self.tree.configure(yscrollcommand=vsb.set) #, xscrollcommand=hsb.set)
+        self.tree.configure(yscrollcommand=vsb.set)
 
     def append_data(self, row_data):
         if 'num' not in row_data:
@@ -59,10 +54,7 @@ class CustomTreeView:
             
         values = (
             row_data['id'],
-            # row_data['domain'],
             row_data['url'],
-            # row_data['inner'],
-            # row_data['form'],
             row_data['num'],
             row_data['method'],
             row_data['xss'],

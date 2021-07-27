@@ -1,5 +1,4 @@
 import sys
-import time
 
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
@@ -35,16 +34,11 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
         writer.write(all_urls[0]+'\n')
 
         while len(all_urls) != 0:
-            # print('-' * 20)
-            # print(f'All urls list length: {len(all_urls)}')
-
             popped_url = all_urls[0]
-            # print(f'Url: {popped_url}\n')
 
             if popped_url not in all_explored_urls:
                 # add this url to explored urls list so we know it is already explored.
                 all_explored_urls.append(popped_url)
-                # print(f'Exploring url: {popped_url}')
 
                 popped_url = popped_url       \
                     .replace('www.', '')      \
@@ -52,13 +46,9 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
                     .replace('http://', '')
 
                 urls_of_this_page = find_all_urls_of_single_webpage(popped_url.strip("/"), driver)
-                # print(f'Found {len(urls_of_this_page)} urls on this page.')
-
-                # * changing this line. be careful
-                # new_found_urls = list(set(urls_of_this_page).difference(set(all_urls+all_explored_urls)))
+                
                 new_found_urls = sanitize_urls_based_on_blacklist(urls_of_this_page, all_urls+all_explored_urls)
 
-                # print(f'{len(new_found_urls)} urls are new.')
                 sanitized_urls = sanitize_urls_based_on_blacklist(new_found_urls, blacklist_urls)
                 all_urls.extend(sanitized_urls)
 
@@ -67,8 +57,6 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
                     if middlewares is not None:
                         for middleware in middlewares:
                             middleware(url)
-
-                # time.sleep(1)
             else:
                 print('This url is already explored.')
 
@@ -78,12 +66,14 @@ def find_all_urls_of_website(root_urls, driver, all_explored_urls=None, middlewa
 
 
 if __name__ == '__main__':
+    #! to run this module as a separate file you should change the relative imports
+
     all_urls = ['http://www.google.com/']
 
     if len(sys.argv) > 1:
         all_urls = [sys.argv[1]]
     else:
-        # print('You should enter a url as the first input.')
+        print('You should enter a url as the first input.')
         sys.exit(1)
 
     driver = setup_driver()
@@ -92,7 +82,5 @@ if __name__ == '__main__':
     all_explored_urls = []
 
     all_exp_urls = find_all_urls_of_website(all_urls, driver, all_explored_urls)
-    # print('\n\n' + '-' * 5 + 'Final Result' + '-' * 5)
-    # print(all_exp_urls)
 
     driver.quit()

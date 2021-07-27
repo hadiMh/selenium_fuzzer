@@ -11,7 +11,7 @@ def setup_driver(wait_for_full_load=True):
     # with these settings, loading of a webpage would be faster.
     # because selenium won't wait for images to load and we don't need images.
     caps = DesiredCapabilities().CHROME
-    # TODO: change this so it is enabled by choice.
+    
     if not wait_for_full_load:
         caps["pageLoadStrategy"] = "eager"
 

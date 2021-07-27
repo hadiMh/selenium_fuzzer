@@ -5,8 +5,6 @@ from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from .html_classes import Form, Input, WebPage
 from .helpers import setup_driver, get_all_urls_of_file
 
-import time
-
 def get_forms_of_all_pages_to_objs(all_urls, driver, middlewares=None):
     """
     Explores all pages from the all_urls list.
@@ -22,13 +20,13 @@ def get_forms_of_all_pages_to_objs(all_urls, driver, middlewares=None):
             for middleware in middlewares:
                 middleware(webpage_obj)
 
-        # time.sleep(2)
-
     return all_web_pages_objs
 
 
 if __name__ == '__main__':
-    # all_urls = ['http://www.google.com']
+    #! to run this module as a separate file you should change the relative imports
+    
+    # all_urls = ['https://developer.mozilla.org']
     all_urls = get_all_urls_of_file()
 
     all_urls = all_urls[1:]

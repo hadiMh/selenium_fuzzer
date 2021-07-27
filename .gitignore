@@ -2,4 +2,5 @@
 __pycache__/
 *.log
 
+# to don't track urls files
 *.txt
